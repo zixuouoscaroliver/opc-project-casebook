@@ -24,11 +24,20 @@ Public workbook rules:
 - drop private pending notes;
 - export to `.xlsx`, `.md`, and `.csv`.
 
-The public workbook contains 30 rows and three sheets:
+The public workbook contains 33 rows and four sheets:
 
 - `概览`;
 - `成就素材库`;
-- `标签词典`.
+- `标签词典`;
+- `OPC利益测算`.
+
+The final three rows convert OPC evidence into public-safe impact narratives:
+
+- evidence retrieval and session inventory time saved;
+- Figma Make context-governance time released;
+- supplier product AI optimization and listing-speed savings.
+
+These rows are written as estimates and formulas, not as verified GMV or customer-growth claims.
 
 ## H5 Demo Implementation
 

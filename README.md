@@ -18,6 +18,7 @@
 - [GitHub Pages 展示页](https://zixuouoscaroliver.github.io/opc-project-casebook/)
 - [OPC 项目地图](casebook/01-project-map.md)
 - [成就素材库公开版](resume-assets/achievement-library.md)
+- [OPC 直接利益测算](resume-assets/opc-business-impact.md)
 - [失败复盘与迭代过程](docs/failure-review.md)
 - [时间戳证明](evidence/timestamped-proof.md)
 
@@ -36,7 +37,7 @@
 | `docs/` | GitHub Pages、PRD、架构、数据模型、工程原则、实现说明、运行手册、失败复盘、简历证明 |
 | `evidence/` | 时间线、时间戳证明、指标快照、发布验证 |
 | `evidence-index/` | 第一版脱敏证据索引与公开边界说明 |
-| `resume-assets/` | 成就素材库公开版，含 `.xlsx`、Markdown、CSV |
+| `resume-assets/` | 成就素材库公开版，含 `.xlsx`、Markdown、CSV 和收益测算说明 |
 | `src/` | 公开源代码边界说明；真实私有运行源不直接公开 |
 | `config/` | 公开发布边界和校验策略 |
 
@@ -46,7 +47,7 @@
 2. 再看 [项目地图](casebook/01-project-map.md) 和 [功能模块清单](casebook/02-function-modules.md)。
 3. 如果想看工程判断，看 [架构](docs/architecture.md)、[实现说明](docs/implementation-notes.md)、[失败复盘](docs/failure-review.md)。
 4. 如果想验证真实性，看 [时间戳证明](evidence/timestamped-proof.md)、[指标快照](evidence/metrics-snapshot.json)、[发布验证](evidence/publication-validation.md)。
-5. 如果要写简历，看 [成就素材库公开版](resume-assets/achievement-library.md) 和 [简历证明叙事](docs/resume-proof.md)。
+5. 如果要写简历，看 [成就素材库公开版](resume-assets/achievement-library.md)、[OPC 直接利益测算](resume-assets/opc-business-impact.md) 和 [简历证明叙事](docs/resume-proof.md)。
 
 ## 公开边界
 
@@ -62,6 +63,7 @@
 - 20 项 OPC 项目/产物组整理。
 - 14 个业务域功能模块清单。
 - 多个可浏览 H5 Demo。
-- 30 条公开版成就素材，可直接服务简历和作品集表达。
+- 33 条公开版成就素材，可直接服务简历、面试和作品集表达。
+- 公开收益口径：把证据检索、session 盘点、商品 AI 优化和 Figma Make 上下文治理转成可解释的时间/成本节约测算，同时标明不能硬写的收入和客户增长边界。
 - 13 条真实迭代失败与经验复盘。
 - 发布验证记录：公开仓库、Pages built、首页与 Demo HTTP 200、敏感信息扫描、Excel XML 扫描。

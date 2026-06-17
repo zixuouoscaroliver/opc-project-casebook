@@ -15,7 +15,7 @@ This is a public archive runbook, not a production service runbook.
    - phone/email patterns.
 4. Inspect the public workbook:
    - expected sheets exist;
-   - row count is 30;
+   - row count is 33;
    - workbook XML has no local source paths.
 5. Check HTML links:
    - every relative `href` and `src` in `docs/` resolves locally.

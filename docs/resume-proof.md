@@ -6,9 +6,10 @@ Built a public engineering evidence archive for an OPC product workstream, conve
 
 ## Resume Bullet Options
 
-- Organized a 2026 OPC product workstream into a public GitHub evidence archive, converting 20 project/asset groups, 14 functional domains, 6 H5 demos, and 30 resume asset rows into a reviewable casebook with GitHub Pages.
+- Organized a 2026 OPC product workstream into a public GitHub evidence archive, converting 20 project/asset groups, 14 functional domains, 6 H5 demos, and 33 resume asset rows into a reviewable casebook with GitHub Pages.
 - Rebuilt private project evidence into a public-safe portfolio repository by separating raw workspace data from sanitized casebook docs, timestamped proof, static demos, and a clean achievement workbook.
 - Documented failure modes across source discovery, privacy boundaries, workbook extraction, Pages deployment, and commit metadata hygiene, turning the archive into both a portfolio artifact and an engineering process record.
+- Translated OPC evidence retrieval, session inventory, product AI optimization, and Figma Make context governance into conservative time/cost impact estimates while explicitly excluding unverified revenue or customer-growth claims.
 
 ## Interview Talking Points
 
@@ -22,3 +23,4 @@ Built a public engineering evidence archive for an OPC product workstream, conve
 - `docs/failure-review.md`: iteration process and lessons.
 - `evidence/timestamped-proof.md`: what each timestamp proves.
 - `resume-assets/achievement-library-public.xlsx`: structured resume material.
+- `resume-assets/opc-business-impact.md`: public-safe impact estimate and claim boundary.

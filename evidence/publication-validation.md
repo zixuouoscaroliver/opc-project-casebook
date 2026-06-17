@@ -11,10 +11,12 @@ Validation date: 2026-06-17.
 | GitHub Pages status | `built` |
 | Pages home HTTP check | 200 |
 | H5 demo HTTP check | 200 |
+| Public file count | 39 |
+| Public content size | About 1.88MiB |
 | Largest public file | Under 1MiB |
 | Files above 25MiB | 0 |
-| Public workbook row count | 30 |
-| Public workbook sheets | `概览`, `成就素材库`, `标签词典` |
+| Public workbook row count | 33 |
+| Public workbook sheets | `概览`, `成就素材库`, `标签词典`, `OPC利益测算` |
 | Workbook formula error scan | 0 formula error matches |
 | Workbook local path scan | 0 hits |
 | HTML relative link check | 0 missing links |
