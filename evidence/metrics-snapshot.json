@@ -1,0 +1,32 @@
+{
+  "project": "opc-project-casebook",
+  "original_evidence_window": "2026-03 to 2026-06",
+  "inventory_consolidation_date": "2026-06-16",
+  "public_archive_date": "2026-06-17",
+  "github_repository": "https://github.com/zixuouoscaroliver/opc-project-casebook",
+  "github_pages": "https://zixuouoscaroliver.github.io/opc-project-casebook/",
+  "public_file_count": 38,
+  "public_content_bytes": 1994658,
+  "casebook_documents": 5,
+  "engineering_docs": 8,
+  "evidence_documents": 5,
+  "h5_demo_count": 6,
+  "screenshot_count": 4,
+  "resume_asset_rows": 30,
+  "failure_review_items": 13,
+  "source_inventory_counts": {
+    "opc_project_groups": 20,
+    "functional_domains": 14,
+    "macmini_session_evidence_rows": 116,
+    "wide_candidate_items": 104
+  },
+  "validation": {
+    "files_over_25MiB": 0,
+    "pages_status": "built",
+    "pages_home_http": 200,
+    "demo_http": 200,
+    "sensitive_text_scan": "no publish-blocking hits",
+    "xlsx_internal_path_scan": "0 hits",
+    "html_relative_link_check": "0 missing links"
+  }
+}

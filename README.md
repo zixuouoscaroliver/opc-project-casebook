@@ -1,12 +1,25 @@
 # OPC Project Casebook
 
-公开作品集：OPC 项目经历、业务拆解、Figma Make 协同、证据库自动化、H5 Demo 和成就素材库。
+公开工程证据库：OPC 项目经历、业务拆解、Figma Make 协同、证据库自动化、H5 Demo、成就素材库、迭代失败复盘和时间戳证明。
+
+## 项目一句话
+
+这个仓库把 2026-03 到 2026-06 的 OPC 项目工作，从分散的 Figma Make 包、H5、Excel、XMind、项目盘点和本地证据，整理成一个可公开检查的 GitHub 作品集。
+
+## 为什么这个项目不只是“整理文件”
+
+- 原始工作区约 3.7GB，混有临时目录、录音、模型、日志、截图包和私有证据，不能直接公开。
+- OPC 主证据不在一个干净 GitHub 仓库里，而是分散在本地文件、Figma Make 包、证据库、H5、Excel 和 Codex session 派生材料里。
+- 公开版既要证明项目经历，又不能泄露本机路径、私有仓库、原始聊天、API 结果、字段 ID 和大文件。
+- 过程中出现过真实失败：宽扫卡顿、GitHub 私有证据不可验证、Excel 源路径泄露风险、Pages 构建 404、提交作者信息暴露本机身份等。这些都记录在失败复盘里。
 
 ## 三个入口
 
 - [GitHub Pages 展示页](https://zixuouoscaroliver.github.io/opc-project-casebook/)
 - [OPC 项目地图](casebook/01-project-map.md)
 - [成就素材库公开版](resume-assets/achievement-library.md)
+- [失败复盘与迭代过程](docs/failure-review.md)
+- [时间戳证明](evidence/timestamped-proof.md)
 
 ## 我在这个项目里做了什么
 
@@ -20,9 +33,20 @@
 | 目录 | 内容 |
 |---|---|
 | `casebook/` | 项目总览、项目地图、功能模块、代码/GitHub 关系、个人贡献映射 |
-| `docs/` | GitHub Pages 首页和 H5 Demo |
-| `evidence-index/` | 脱敏证据索引与公开边界说明 |
+| `docs/` | GitHub Pages、PRD、架构、数据模型、工程原则、实现说明、运行手册、失败复盘、简历证明 |
+| `evidence/` | 时间线、时间戳证明、指标快照、发布验证 |
+| `evidence-index/` | 第一版脱敏证据索引与公开边界说明 |
 | `resume-assets/` | 成就素材库公开版，含 `.xlsx`、Markdown、CSV |
+| `src/` | 公开源代码边界说明；真实私有运行源不直接公开 |
+| `config/` | 公开发布边界和校验策略 |
+
+## 建议阅读顺序
+
+1. 先看 [GitHub Pages 展示页](https://zixuouoscaroliver.github.io/opc-project-casebook/)。
+2. 再看 [项目地图](casebook/01-project-map.md) 和 [功能模块清单](casebook/02-function-modules.md)。
+3. 如果想看工程判断，看 [架构](docs/architecture.md)、[实现说明](docs/implementation-notes.md)、[失败复盘](docs/failure-review.md)。
+4. 如果想验证真实性，看 [时间戳证明](evidence/timestamped-proof.md)、[指标快照](evidence/metrics-snapshot.json)、[发布验证](evidence/publication-validation.md)。
+5. 如果要写简历，看 [成就素材库公开版](resume-assets/achievement-library.md) 和 [简历证明叙事](docs/resume-proof.md)。
 
 ## 公开边界
 
@@ -39,3 +63,5 @@
 - 14 个业务域功能模块清单。
 - 多个可浏览 H5 Demo。
 - 30 条公开版成就素材，可直接服务简历和作品集表达。
+- 13 条真实迭代失败与经验复盘。
+- 发布验证记录：公开仓库、Pages built、首页与 Demo HTTP 200、敏感信息扫描、Excel XML 扫描。
