@@ -1,0 +1,1362 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPC 租户点状关系图</title>
+  <style>
+    :root {
+      --bg: #eef4fb;
+      --paper: #ffffff;
+      --ink: #102037;
+      --muted: #607089;
+      --line: #cdd9e8;
+      --blue: #236bd6;
+      --green: #15935f;
+      --orange: #e2762b;
+      --purple: #7457d9;
+      --red: #d84a45;
+      --cyan: #0896a8;
+      --slate: #65758b;
+      --shadow: 0 20px 58px rgba(16, 32, 55, .12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(35, 107, 214, .14), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      width: 100vw;
+      height: 100vh;
+      min-height: 0;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: minmax(360px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(205, 217, 232, .9);
+      background: rgba(255, 255, 255, .88);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 34px rgba(16, 32, 55, .07);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      color: #0c1a2e;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 920;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 112px);
+      gap: 8px;
+    }
+
+    .stat {
+      min-height: 58px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .stat strong {
+      display: block;
+      color: #0c1a2e;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 920;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 288px minmax(0, 1fr) 340px;
+      min-height: 0;
+    }
+
+    .side {
+      min-height: 0;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(16px);
+    }
+
+    .side.right {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .side-inner {
+      height: 100%;
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .search {
+      margin-bottom: 14px;
+    }
+
+    .search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      outline: 0;
+      color: var(--ink);
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .search input:focus {
+      border-color: rgba(35, 107, 214, .7);
+      box-shadow: 0 0 0 3px rgba(35, 107, 214, .12);
+    }
+
+    .section-title {
+      margin: 14px 0 9px;
+      color: #33445f;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .mode-list,
+    .group-list,
+    .path-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mode-btn,
+    .group-btn,
+    .path-btn {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      width: 100%;
+      min-height: 40px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #30425d;
+      background: #fff;
+      text-align: left;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .group-btn {
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+    }
+
+    .mode-btn:hover,
+    .group-btn:hover,
+    .path-btn:hover,
+    .mode-btn.active,
+    .group-btn.active,
+    .path-btn.active {
+      transform: translateY(-1px);
+      border-color: rgba(35, 107, 214, .55);
+      box-shadow: 0 10px 26px rgba(16, 32, 55, .09);
+    }
+
+    .mode-btn b,
+    .group-btn b,
+    .path-btn b {
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 900;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mode-btn small,
+    .group-btn small,
+    .path-btn small {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #4c5d76;
+      background: rgba(255, 255, 255, .78);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .graph {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      background:
+        linear-gradient(rgba(16, 32, 55, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 32, 55, .045) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .toolbar {
+      position: absolute;
+      z-index: 3;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid rgba(205, 217, 232, .94);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .88);
+      box-shadow: 0 12px 32px rgba(16, 32, 55, .09);
+      backdrop-filter: blur(14px);
+      pointer-events: auto;
+    }
+
+    .tool {
+      min-width: 34px;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: #41536d;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tool:hover {
+      border-color: rgba(35, 107, 214, .36);
+      color: #0c1a2e;
+      background: #fff;
+    }
+
+    .badge {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      max-width: min(560px, calc(100% - 32px));
+      padding: 11px 13px;
+      border: 1px solid rgba(205, 217, 232, .92);
+      border-radius: var(--radius);
+      color: #4a5b73;
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 12px 32px rgba(16, 32, 55, .08);
+      backdrop-filter: blur(14px);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .detail-head {
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .detail-head h2 {
+      margin: 0;
+      color: #0c1a2e;
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 920;
+    }
+
+    .detail-card {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .detail-card h3 {
+      margin: 0 0 8px;
+      color: #33445f;
+      font-size: 12px;
+      font-weight: 920;
+    }
+
+    .detail-card p,
+    .detail-card li {
+      color: #4c5d76;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .detail-card p {
+      margin: 0;
+    }
+
+    .detail-card ul {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .empty {
+      display: grid;
+      min-height: 210px;
+      place-items: center;
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1160px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .header {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .side,
+      .side.right {
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .side-inner {
+        overflow: visible;
+      }
+
+      .mode-list,
+      .group-list,
+      .path-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .graph {
+        height: 72vh;
+        min-height: 640px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .header {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .stats,
+      .mode-list,
+      .group-list,
+      .path-list {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 8px;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .tools {
+        width: 100%;
+      }
+
+      .tool {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>OPC 租户点状关系图</h1>
+        <p>按 `OPC 租户.xmind` 重建：商品招商链路、分销招商链路、CPS 帮卖链路、B2B 中台、外部平台、订单与分账放在同一张可拖拽关系图里。</p>
+      </div>
+      <div class="stats" aria-label="图谱统计">
+        <div class="stat"><strong id="nodeCount">0</strong><span>节点</span></div>
+        <div class="stat"><strong id="edgeCount">0</strong><span>关系</span></div>
+        <div class="stat"><strong id="groupCount">0</strong><span>分组</span></div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="side">
+        <div class="side-inner">
+          <div class="search">
+            <input id="searchInput" type="search" placeholder="搜索：供应商、经销商、CPS、订单、分账" />
+          </div>
+
+          <div class="section-title">视图模式</div>
+          <div class="mode-list" id="modeList"></div>
+
+          <div class="section-title">按分组看</div>
+          <div class="group-list" id="groupList"></div>
+
+          <div class="section-title">关键链路</div>
+          <div class="path-list" id="pathList"></div>
+
+          <div class="note">
+            默认只显示主干节点，避免像全量脑图一样糊成一团。拖动空白处移动画布，拖动节点会固定位置；点“解锁”恢复自动布局。
+          </div>
+        </div>
+      </aside>
+
+      <section class="graph">
+        <div class="toolbar">
+          <div></div>
+          <div class="tools">
+            <button class="tool" id="zoomOut" type="button">-</button>
+            <button class="tool" id="zoomIn" type="button">+</button>
+            <button class="tool" id="fitView" type="button">复位</button>
+            <button class="tool" id="unlockNodes" type="button">解锁</button>
+          </div>
+        </div>
+        <canvas id="graphCanvas" aria-label="OPC 租户点状关系图"></canvas>
+        <div class="badge" id="badge">当前是“主干总览”：只看平台、供应商、招商、经销商、CPS、订单、发货、分账之间的主关系。</div>
+      </section>
+
+      <aside class="side right">
+        <div class="side-inner" id="detailPanel">
+          <div class="empty">点击图上的节点后，这里会显示它在 OPC 租户里的业务含义、上游来源和下游去向。</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const groups = {
+      platform: { name: "平台与租户", color: "#236bd6", x: 540, y: 340, note: "平台公司、项目操盘手、B2B 中台和租户配置。" },
+      supplier: { name: "供应链", color: "#15935f", x: 250, y: 250, note: "品牌方、供应商、商品、供货中心、ERP/WMS。" },
+      invite: { name: "商品招商", color: "#f59e0b", x: 255, y: 575, note: "V1-V4 招商级别、邀请码、招商上下级。" },
+      distribution: { name: "分销招商", color: "#0ea5a8", x: 620, y: 635, note: "Vip 经销商层级、员工、B2C2C 商城和订单汇聚。" },
+      cps: { name: "CPS 帮卖", color: "#7c55d9", x: 950, y: 300, note: "微信小店、优选联盟、达人、推客、内容场景。" },
+      transaction: { name: "交易订单", color: "#d84a45", x: 970, y: 650, note: "消费者下单、订单中心、发货、售后、状态流转。" },
+      settlement: { name: "结算分账", color: "#e2762b", x: 1170, y: 470, note: "佣金、返佣、财务 Job、优选联盟分账。" },
+      data: { name: "规则数据", color: "#64748b", x: 1200, y: 800, note: "规则、接口、数据流、风控和经营分析。" }
+    };
+
+    const nodes = [
+      n("tenant", "OPC 租户", "platform", "业务租户总入口，承载商品招商、分销招商、CPS 帮卖等多条链路。", 24, true),
+      n("platform_company", "平台公司 / 项目操盘手", "platform", "负责制定级别、选品、招商规则、订单分发、结算规则。", 20, true),
+      n("b2b", "B2B 管理后台", "platform", "平台公司和操盘手使用的管理端。", 16),
+      n("tenant_config", "租户配置", "platform", "配置项目、角色、权限、业务链路和基础规则。", 13),
+      n("level_center", "权限 / 级别中心", "platform", "管理 V 级别、Vip 级别、邀请权限和组织关系。", 14),
+      n("product_center", "商品中心", "platform", "沉淀商品、SKU、素材、CPS 链接、选品池。", 14),
+      n("order_center", "订单中心", "platform", "承接交易订单、订单汇聚、上游分发、发货售后。", 18, true),
+      n("data_center", "数据 / 风控中心", "platform", "沉淀交易、商品、组织、佣金和风控数据。", 14),
+
+      n("brand", "品牌方", "supplier", "提供商品、素材、供货能力，可对接 ERP/WMS。", 14),
+      n("supplier", "供应商", "supplier", "供应商入驻、资质审核、商品上架、库存和发货。", 18, true),
+      n("supplier_portal", "供应商门户", "supplier", "供应商处理入驻、商品、订单、发货。", 13),
+      n("erp_wms", "ERP/WMS 接口", "supplier", "用于发货、库存、物流状态回传。", 14),
+      n("goods_on_shelf", "商品上架 / 审核", "supplier", "品牌方或供应商上架商品，维护 SKU、价格、素材。", 15),
+      n("supply_center", "供货中心", "supplier", "已审核商品进入供货中心，供操盘手选品。", 15),
+      n("selection_center", "选品中心", "supplier", "操盘手从供货中心选择商品，对代理商或经销商开放。", 16, true),
+      n("cooperation_mode", "商品合作模式", "supplier", "一件代发、云仓、囤货。", 13),
+
+      n("invite_level", "招商级别 V1-V4", "invite", "V1 招商总监、V2 招商主席、V3 招商经理、V4 招商专员。", 16, true),
+      n("invite_code", "邀请码定级别", "invite", "招商使用的邀请码决定被邀请人员或企业的级别。", 14),
+      n("director", "招商总监 V1", "invite", "最高招商级别，可招募更低级别。", 13),
+      n("chairman", "招商主席 V2", "invite", "招商层级中的 V2 角色。", 13),
+      n("manager", "招商经理 V3", "invite", "招商层级中的 V3 角色。", 13),
+      n("specialist", "招商专员 V4", "invite", "招商层级中的 V4 角色。", 13),
+      n("invite_lower", "高级招低级", "invite", "高级招商人员或企业只能招募比自己低的招商角色。", 14),
+
+      n("dealer_level", "经销商级别 Vip1-Vip5", "distribution", "平台公司可自定义经销商级别，高级别经销商可招募低级别经销商。", 17, true),
+      n("vip1", "Vip1 超钻级", "distribution", "分销招商链路里的高级经销商。", 12),
+      n("vip2", "Vip2 钻石级", "distribution", "分销招商链路里的经销商级别。", 12),
+      n("vip3", "Vip3 白金级", "distribution", "分销招商链路里的经销商级别。", 12),
+      n("vip4", "Vip4 黄金级", "distribution", "可开 B2C2C 商城并招募下级。", 12),
+      n("vip5", "Vip5 银级", "distribution", "分销招商链路里的低级经销商。", 12),
+      n("employee", "经销商员工", "distribution", "经销商招募下级时中间可存在两级员工。", 13),
+      n("employee_commission", "员工佣金归属", "distribution", "员工佣金由员工所属经销商返佣。", 14),
+      n("b2c2c", "B2C2C 商城", "distribution", "经销商装修、铺货并对消费者销售的独立商城。", 17, true),
+      n("dealer_select_goods", "下级选品 / 进货", "distribution", "下级经销商从上级选品或进货。", 14),
+      n("decorate_shop", "商城装修 / 铺货", "distribution", "经销商把商品铺到自己的商城并做页面装修。", 13),
+      n("order_aggregate", "订单向上级汇聚", "distribution", "消费者订单向上级经销商汇总；囤货模式可例外。", 15),
+
+      n("wechat_shop", "微信小店", "cps", "供应商开微信小店并上架商品。", 15),
+      n("youxuan", "优选联盟", "cps", "设置商品分销链接和佣金，承接外部分账口径。", 15),
+      n("cps_goods", "CPS 选品库", "cps", "OPC 同步商品分销链接，展示 CPS 商品池。", 16, true),
+      n("cps_commission_set", "CPS 佣金设置", "cps", "机构可修改商品佣金，选择商品推给达人或推客。", 13),
+      n("mcn", "达人 MCN 机构", "cps", "绑定达人并组织达人带货。", 13),
+      n("influencer", "达人", "cps", "确认商品上架橱窗，关联短视频或直播间。", 14),
+      n("promoter_mcn", "推客 MCN 机构", "cps", "组织推客分发商品或内容链接。", 13),
+      n("promoter", "推客", "cps", "分享商品、直播间、短视频给消费者。", 14),
+      n("short_video", "短视频", "cps", "达人或推客带货内容场景。", 12),
+      n("live_room", "直播间", "cps", "达人或推客带货内容场景。", 12),
+      n("promoter_shop", "推客商城", "cps", "推客承接消费者进入、浏览和成交的商城。", 13),
+
+      n("consumer", "消费者", "transaction", "通过商城、短视频、直播间、推客链接下单支付。", 18, true),
+      n("pay", "支付 / 退款接口", "transaction", "支付、退款、回调、交易状态。", 14),
+      n("trade_order", "交易订单", "transaction", "消费者下单后产生交易订单。", 15),
+      n("order_dispatch", "订单分发", "transaction", "平台订单按上游关系向供应商或经销商分发。", 15),
+      n("delivery", "发货管理", "transaction", "供应商或仓配系统发货，回传物流状态。", 14),
+      n("after_sales", "售后状态", "transaction", "待售后、售后中、售后完成等状态。", 13),
+      n("order_status", "订单状态", "transaction", "待发货、预售、待审核、已发货、待售后。", 14),
+
+      n("settlement", "结算 / 佣金中心", "settlement", "管理佣金配置、分账、返佣、对账。", 17, true),
+      n("finance_job", "财务 Job", "settlement", "定时计算佣金、分账和对账。", 13),
+      n("profit_split", "分账规则", "settlement", "供应商、机构、达人、推客按链接和佣金规则分账。", 15),
+      n("rebate", "返佣归属", "settlement", "员工、经销商、招商角色之间的返佣归属。", 13),
+      n("withdraw", "提现 / 对账", "settlement", "佣金提现、银行存管、对账和合规处理。", 13),
+
+      n("rule_engine", "规则引擎", "data", "承接级别、邀请、佣金、商品合作和订单状态规则。", 16, true),
+      n("api_gateway", "API 网关", "data", "统一对接微信、支付、ERP/WMS、物流、短信等接口。", 13),
+      n("message_queue", "消息队列", "data", "订单、发货、分账、数据同步等异步事件。", 13),
+      n("data_flow", "数据流转", "data", "业务产生、采集、处理、存储、应用、决策支持。", 14),
+      n("risk_control", "风控规则", "data", "黑白名单、异常交易、资金安全、履约风险。", 14),
+      n("analytics", "经营分析", "data", "商品、交易、佣金、团队、渠道的经营分析。", 13)
+    ];
+
+    const links = [
+      e("tenant", "platform_company", "承载"),
+      e("platform_company", "b2b", "使用"),
+      e("platform_company", "tenant_config", "配置"),
+      e("platform_company", "level_center", "制定级别"),
+      e("platform_company", "selection_center", "操盘手选品"),
+      e("b2b", "product_center", "管理"),
+      e("b2b", "order_center", "管理"),
+      e("b2b", "settlement", "管理"),
+      e("b2b", "data_center", "查看"),
+
+      e("brand", "supplier", "供货"),
+      e("supplier", "supplier_portal", "使用"),
+      e("supplier", "goods_on_shelf", "上架"),
+      e("goods_on_shelf", "supply_center", "审核通过"),
+      e("supply_center", "selection_center", "进入选品"),
+      e("supplier", "erp_wms", "对接"),
+      e("cooperation_mode", "order_dispatch", "影响"),
+      e("erp_wms", "delivery", "发货回传"),
+
+      e("level_center", "invite_level", "配置"),
+      e("invite_level", "invite_code", "使用"),
+      e("invite_level", "director", "包含"),
+      e("director", "chairman", "可招募"),
+      e("chairman", "manager", "可招募"),
+      e("manager", "specialist", "可招募"),
+      e("invite_code", "invite_lower", "决定级别"),
+      e("invite_lower", "selection_center", "获得选品权限"),
+
+      e("level_center", "dealer_level", "配置"),
+      e("dealer_level", "vip1", "包含"),
+      e("vip1", "vip2", "招募"),
+      e("vip2", "vip3", "招募"),
+      e("vip3", "vip4", "招募"),
+      e("vip4", "vip5", "招募"),
+      e("vip4", "b2c2c", "开商城"),
+      e("vip5", "b2c2c", "可开商城"),
+      e("dealer_level", "employee", "可带员工"),
+      e("employee", "employee_commission", "佣金归属"),
+      e("selection_center", "dealer_select_goods", "开放"),
+      e("dealer_select_goods", "decorate_shop", "铺货"),
+      e("decorate_shop", "b2c2c", "形成商城"),
+      e("b2c2c", "consumer", "销售给"),
+      e("b2c2c", "order_aggregate", "订单汇聚"),
+      e("order_aggregate", "order_center", "进入订单中心"),
+
+      e("supplier", "wechat_shop", "开店"),
+      e("wechat_shop", "youxuan", "设置分销链接"),
+      e("youxuan", "cps_goods", "同步链接"),
+      e("cps_goods", "cps_commission_set", "设置佣金"),
+      e("cps_commission_set", "mcn", "推送达人"),
+      e("mcn", "influencer", "绑定"),
+      e("influencer", "short_video", "关联"),
+      e("influencer", "live_room", "关联"),
+      e("cps_commission_set", "promoter_mcn", "推送推客"),
+      e("promoter_mcn", "promoter", "绑定"),
+      e("promoter", "promoter_shop", "分享商城"),
+      e("short_video", "consumer", "触达"),
+      e("live_room", "consumer", "触达"),
+      e("promoter_shop", "consumer", "触达"),
+
+      e("consumer", "pay", "支付"),
+      e("pay", "trade_order", "生成"),
+      e("trade_order", "order_center", "进入"),
+      e("order_center", "order_dispatch", "分发"),
+      e("order_dispatch", "supplier", "通知供货"),
+      e("order_dispatch", "delivery", "发货"),
+      e("delivery", "order_status", "更新"),
+      e("after_sales", "order_status", "更新"),
+      e("order_status", "settlement", "结算依据"),
+
+      e("settlement", "profit_split", "计算"),
+      e("profit_split", "youxuan", "外部分账"),
+      e("profit_split", "influencer", "达人佣金"),
+      e("profit_split", "promoter", "推客佣金"),
+      e("settlement", "rebate", "返佣"),
+      e("employee_commission", "rebate", "归属"),
+      e("settlement", "finance_job", "定时任务"),
+      e("settlement", "withdraw", "提现对账"),
+
+      e("rule_engine", "invite_level", "约束"),
+      e("rule_engine", "dealer_level", "约束"),
+      e("rule_engine", "cooperation_mode", "约束"),
+      e("rule_engine", "cps_commission_set", "约束"),
+      e("rule_engine", "order_status", "约束"),
+      e("api_gateway", "wechat_shop", "接口"),
+      e("api_gateway", "pay", "接口"),
+      e("api_gateway", "erp_wms", "接口"),
+      e("message_queue", "order_center", "异步事件"),
+      e("message_queue", "delivery", "异步事件"),
+      e("message_queue", "finance_job", "异步任务"),
+      e("trade_order", "data_flow", "采集"),
+      e("goods_on_shelf", "data_flow", "采集"),
+      e("settlement", "data_flow", "采集"),
+      e("data_flow", "analytics", "分析"),
+      e("data_flow", "risk_control", "风控"),
+      e("analytics", "platform_company", "决策支持"),
+      e("risk_control", "order_center", "拦截 / 预警")
+    ];
+
+    const modes = {
+      overview: {
+        name: "主干总览",
+        hint: "只显示 OPC 租户最核心的业务骨架。",
+        nodes: ["tenant", "platform_company", "b2b", "supplier", "goods_on_shelf", "supply_center", "selection_center", "invite_level", "dealer_level", "b2c2c", "wechat_shop", "youxuan", "cps_goods", "influencer", "promoter", "consumer", "trade_order", "order_center", "order_dispatch", "delivery", "settlement", "profit_split", "rule_engine", "data_flow", "analytics"]
+      },
+      goods: {
+        name: "商品招商",
+        hint: "看品牌方 / 供应商商品进入供货中心、选品中心、招商级别和订单分发。",
+        nodes: ["tenant", "platform_company", "b2b", "supplier", "supplier_portal", "brand", "goods_on_shelf", "supply_center", "selection_center", "cooperation_mode", "invite_level", "invite_code", "director", "chairman", "manager", "specialist", "invite_lower", "consumer", "trade_order", "order_center", "order_dispatch", "delivery", "erp_wms", "settlement", "rule_engine"]
+      },
+      distribution: {
+        name: "分销招商",
+        hint: "看经销商 Vip 层级、员工归属、选品、B2C2C 商城和订单汇聚。",
+        nodes: ["tenant", "platform_company", "level_center", "dealer_level", "vip1", "vip2", "vip3", "vip4", "vip5", "employee", "employee_commission", "selection_center", "dealer_select_goods", "decorate_shop", "b2c2c", "consumer", "trade_order", "order_aggregate", "order_center", "settlement", "rebate", "rule_engine"]
+      },
+      cps: {
+        name: "CPS 帮卖",
+        hint: "看微信小店、优选联盟、达人、推客、内容场景和多方分账。",
+        nodes: ["tenant", "platform_company", "supplier", "wechat_shop", "youxuan", "cps_goods", "cps_commission_set", "mcn", "influencer", "promoter_mcn", "promoter", "short_video", "live_room", "promoter_shop", "consumer", "pay", "trade_order", "order_center", "settlement", "profit_split", "api_gateway", "data_flow"]
+      },
+      rules: {
+        name: "规则数据",
+        hint: "看规则引擎、接口、消息队列、数据流转、风控和经营分析。",
+        nodes: ["tenant", "platform_company", "rule_engine", "invite_level", "dealer_level", "cooperation_mode", "cps_commission_set", "order_status", "api_gateway", "wechat_shop", "pay", "erp_wms", "message_queue", "order_center", "delivery", "finance_job", "data_flow", "analytics", "risk_control", "data_center"]
+      },
+      all: { name: "全部", hint: "显示全部节点，适合搜索和局部查看。", nodes: null }
+    };
+
+    const paths = {
+      goods: { name: "商品招商链路", nodes: ["brand", "supplier", "goods_on_shelf", "supply_center", "selection_center", "invite_level", "consumer", "trade_order", "order_center", "order_dispatch", "delivery", "settlement"] },
+      dealer: { name: "分销招商链路", nodes: ["platform_company", "dealer_level", "vip1", "vip2", "vip3", "vip4", "b2c2c", "consumer", "trade_order", "order_aggregate", "order_center", "settlement"] },
+      cps: { name: "CPS 成交链路", nodes: ["supplier", "wechat_shop", "youxuan", "cps_goods", "cps_commission_set", "influencer", "short_video", "consumer", "pay", "trade_order", "settlement", "profit_split"] },
+      data: { name: "数据决策链路", nodes: ["trade_order", "order_center", "message_queue", "data_flow", "analytics", "risk_control", "platform_company"] }
+    };
+
+    function n(id, label, group, summary, size = 12, core = false) {
+      return { id, label, group, summary, size, core, x: 0, y: 0, vx: 0, vy: 0, pinned: false };
+    }
+
+    function e(source, target, label) {
+      return { source, target, label };
+    }
+
+    const nodeById = new Map(nodes.map((node) => [node.id, node]));
+    const linked = new Map(nodes.map((node) => [node.id, { in: [], out: [] }]));
+    for (const link of links) {
+      linked.get(link.source).out.push(link);
+      linked.get(link.target).in.push(link);
+    }
+
+    const canvas = document.getElementById("graphCanvas");
+    const ctx = canvas.getContext("2d");
+    const modeList = document.getElementById("modeList");
+    const groupList = document.getElementById("groupList");
+    const pathList = document.getElementById("pathList");
+    const searchInput = document.getElementById("searchInput");
+    const detailPanel = document.getElementById("detailPanel");
+    const badge = document.getElementById("badge");
+
+    const world = { width: 1400, height: 960 };
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let activeMode = "overview";
+    let activeGroup = "all";
+    let activePath = null;
+    let searchTerm = "";
+    let selectedId = "tenant";
+    let hoveredId = null;
+    let dragNode = null;
+    let isPanning = false;
+    let lastPointer = null;
+    let dragOrigin = null;
+
+    function setup() {
+      document.getElementById("nodeCount").textContent = nodes.length;
+      document.getElementById("edgeCount").textContent = links.length;
+      document.getElementById("groupCount").textContent = Object.keys(groups).length;
+      buildModes();
+      buildGroups();
+      buildPaths();
+      seedLayout();
+      resize();
+      selectNode(selectedId);
+      wireEvents();
+      requestAnimationFrame(loop);
+    }
+
+    function buildModes() {
+      for (const [key, mode] of Object.entries(modes)) {
+        const btn = document.createElement("button");
+        btn.className = `mode-btn${key === activeMode ? " active" : ""}`;
+        btn.dataset.mode = key;
+        btn.innerHTML = `<b>${escapeHTML(mode.name)}</b><small>${mode.nodes ? mode.nodes.length : nodes.length} 点</small>`;
+        modeList.appendChild(btn);
+      }
+      modeList.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        activeMode = btn.dataset.mode;
+        activeGroup = "all";
+        activePath = null;
+        searchTerm = "";
+        searchInput.value = "";
+        updateControls();
+        selectFirstVisible();
+        fitView();
+        updateBadge();
+      });
+    }
+
+    function buildGroups() {
+      const all = document.createElement("button");
+      all.className = "group-btn active";
+      all.dataset.group = "all";
+      all.innerHTML = `<span class="dot" style="background:#102037"></span><b>全部分组</b><small>${nodes.length}</small>`;
+      groupList.appendChild(all);
+      for (const [key, group] of Object.entries(groups)) {
+        const count = nodes.filter((node) => node.group === key).length;
+        const btn = document.createElement("button");
+        btn.className = "group-btn";
+        btn.dataset.group = key;
+        btn.innerHTML = `<span class="dot" style="background:${group.color}"></span><b>${escapeHTML(group.name)}</b><small>${count}</small>`;
+        groupList.appendChild(btn);
+      }
+      groupList.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        activeGroup = btn.dataset.group;
+        activeMode = "all";
+        activePath = null;
+        updateControls();
+        selectFirstVisible();
+        fitView();
+        updateBadge();
+      });
+    }
+
+    function buildPaths() {
+      for (const [key, path] of Object.entries(paths)) {
+        const btn = document.createElement("button");
+        btn.className = "path-btn";
+        btn.dataset.path = key;
+        btn.innerHTML = `<b>${escapeHTML(path.name)}</b><small>${path.nodes.length} 点</small>`;
+        pathList.appendChild(btn);
+      }
+      pathList.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        activePath = activePath === btn.dataset.path ? null : btn.dataset.path;
+        activeMode = activePath ? "all" : "overview";
+        activeGroup = "all";
+        updateControls();
+        selectFirstVisible();
+        fitView();
+        updateBadge();
+      });
+    }
+
+    function seedLayout() {
+      const byGroup = {};
+      for (const node of nodes) {
+        if (!byGroup[node.group]) byGroup[node.group] = [];
+        byGroup[node.group].push(node);
+      }
+      for (const [key, items] of Object.entries(byGroup)) {
+        const group = groups[key];
+        items.forEach((node, index) => {
+          const angle = index * 2.399963 + group.x * .004;
+          const radius = 26 + Math.sqrt(index) * 28;
+          node.x = group.x + Math.cos(angle) * radius;
+          node.y = group.y + Math.sin(angle) * radius;
+        });
+      }
+    }
+
+    function wireEvents() {
+      document.getElementById("zoomIn").addEventListener("click", () => zoomAtCenter(1.16));
+      document.getElementById("zoomOut").addEventListener("click", () => zoomAtCenter(.86));
+      document.getElementById("fitView").addEventListener("click", fitView);
+      document.getElementById("unlockNodes").addEventListener("click", () => {
+        nodes.forEach((node) => node.pinned = false);
+        badge.textContent = "已解锁节点，布局会重新靠回分组中心。";
+      });
+      searchInput.addEventListener("input", () => {
+        searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm.length >= 2) {
+          activeMode = "all";
+          activeGroup = "all";
+          activePath = null;
+          updateControls();
+          selectFirstVisible();
+          fitView();
+        }
+      });
+      window.addEventListener("resize", resize);
+      canvas.addEventListener("pointermove", pointerMove);
+      canvas.addEventListener("pointerdown", pointerDown);
+      canvas.addEventListener("pointerup", pointerUp);
+      canvas.addEventListener("pointercancel", pointerUp);
+      canvas.addEventListener("dblclick", (event) => {
+        const hit = hitTest(pointerPosition(event));
+        if (hit) {
+          activeGroup = hit.group;
+          activeMode = "all";
+          activePath = null;
+          updateControls();
+          updateBadge();
+        } else {
+          activeMode = "overview";
+          activeGroup = "all";
+          activePath = null;
+          updateControls();
+          fitView();
+          updateBadge();
+        }
+      });
+      canvas.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        const point = pointerPosition(event);
+        const before = screenToWorld(point);
+        scale = clamp(scale * (event.deltaY > 0 ? .9 : 1.1), .34, 2.25);
+        offsetX = point.x - before.x * scale;
+        offsetY = point.y - before.y * scale;
+      }, { passive: false });
+    }
+
+    function updateControls() {
+      document.querySelectorAll(".mode-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.mode === activeMode));
+      document.querySelectorAll(".group-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.group === activeGroup));
+      document.querySelectorAll(".path-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.path === activePath));
+    }
+
+    function updateBadge() {
+      if (activePath) {
+        badge.textContent = `${paths[activePath].name}：当前只高亮这条链路，可拖动节点重新排版。`;
+      } else if (activeGroup !== "all") {
+        badge.textContent = `${groups[activeGroup].name}：${groups[activeGroup].note}`;
+      } else {
+        badge.textContent = `${modes[activeMode].name}：${modes[activeMode].hint}`;
+      }
+    }
+
+    function selectFirstVisible() {
+      const visible = visibleSet();
+      const next = nodes.find((node) => visible.has(node.id));
+      if (next) selectNode(next.id);
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = Math.max(320, rect.width);
+      height = Math.max(420, rect.height);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fitView();
+    }
+
+    function visibleSet() {
+      if (activePath) return new Set(paths[activePath].nodes);
+      if (searchTerm) {
+        const found = new Set(nodes
+          .filter((node) => node.label.toLowerCase().includes(searchTerm) || node.summary.toLowerCase().includes(searchTerm) || groups[node.group].name.toLowerCase().includes(searchTerm))
+          .map((node) => node.id));
+        for (const id of [...found]) {
+          const refs = linked.get(id);
+          refs.in.forEach((link) => found.add(link.source));
+          refs.out.forEach((link) => found.add(link.target));
+        }
+        return found;
+      }
+      if (activeGroup !== "all") return new Set(nodes.filter((node) => node.group === activeGroup).map((node) => node.id));
+      if (activeMode !== "all" && modes[activeMode].nodes) return new Set(modes[activeMode].nodes);
+      return new Set(nodes.map((node) => node.id));
+    }
+
+    function visibleBounds() {
+      const visible = visibleSet();
+      const shown = nodes.filter((node) => visible.has(node.id));
+      if (!shown.length) return { minX: 0, minY: 0, maxX: world.width, maxY: world.height };
+      return shown.reduce((acc, node) => ({
+        minX: Math.min(acc.minX, node.x - 90),
+        minY: Math.min(acc.minY, node.y - 90),
+        maxX: Math.max(acc.maxX, node.x + 90),
+        maxY: Math.max(acc.maxY, node.y + 90)
+      }), { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity });
+    }
+
+    function fitView() {
+      const bounds = visibleBounds();
+      const padding = width < 680 ? 50 : 110;
+      const boundsW = Math.max(260, bounds.maxX - bounds.minX);
+      const boundsH = Math.max(260, bounds.maxY - bounds.minY);
+      scale = clamp(Math.min((width - padding) / boundsW, (height - padding) / boundsH), .42, 1.35);
+      offsetX = (width - (bounds.minX + bounds.maxX) * scale) / 2;
+      offsetY = (height - (bounds.minY + bounds.maxY) * scale) / 2;
+    }
+
+    function zoomAtCenter(delta) {
+      const point = { x: width / 2, y: height / 2 };
+      const before = screenToWorld(point);
+      scale = clamp(scale * delta, .34, 2.25);
+      offsetX = point.x - before.x * scale;
+      offsetY = point.y - before.y * scale;
+    }
+
+    function loop() {
+      tick();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    function tick() {
+      const visible = visibleSet();
+      for (const node of nodes) {
+        if (!visible.has(node.id) || node.pinned) continue;
+        const group = groups[node.group];
+        const force = node.core ? .018 : .012;
+        node.vx += (group.x - node.x) * force;
+        node.vy += (group.y - node.y) * force;
+      }
+
+      for (const link of links) {
+        if (!visible.has(link.source) || !visible.has(link.target)) continue;
+        const a = nodeById.get(link.source);
+        const b = nodeById.get(link.target);
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.max(1, Math.hypot(dx, dy));
+        const desired = activePath ? 140 : 118;
+        const force = (dist - desired) * .0035;
+        const fx = dx / dist * force;
+        const fy = dy / dist * force;
+        if (!a.pinned) {
+          a.vx += fx;
+          a.vy += fy;
+        }
+        if (!b.pinned) {
+          b.vx -= fx;
+          b.vy -= fy;
+        }
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        if (!visible.has(a.id)) continue;
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          if (!visible.has(b.id)) continue;
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist2 = dx * dx + dy * dy + .01;
+          if (dist2 > 50000) continue;
+          const force = (a.group === b.group ? 64 : 112) / dist2;
+          if (!a.pinned) {
+            a.vx -= dx * force;
+            a.vy -= dy * force;
+          }
+          if (!b.pinned) {
+            b.vx += dx * force;
+            b.vy += dy * force;
+          }
+        }
+      }
+
+      for (const node of nodes) {
+        if (!visible.has(node.id) || node.pinned || dragNode === node) continue;
+        node.vx *= .82;
+        node.vy *= .82;
+        node.x = clamp(node.x + node.vx, 24, world.width - 24);
+        node.y = clamp(node.y + node.vy, 24, world.height - 24);
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+      drawGroups();
+      drawLinks();
+      drawNodes();
+      ctx.restore();
+    }
+
+    function drawGroups() {
+      const visible = visibleSet();
+      for (const [key, group] of Object.entries(groups)) {
+        if (!nodes.some((node) => node.group === key && visible.has(node.id))) continue;
+        ctx.save();
+        ctx.globalAlpha = .08;
+        ctx.fillStyle = group.color;
+        ctx.beginPath();
+        ctx.arc(group.x, group.y, key === "platform" || key === "transaction" ? 176 : 150, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = .82;
+        ctx.fillStyle = "#33445f";
+        ctx.font = "800 18px -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif";
+        ctx.fillText(group.name, group.x - 45, group.y - 126);
+        ctx.restore();
+      }
+    }
+
+    function drawLinks() {
+      for (const link of links) {
+        const alpha = edgeVisibility(link);
+        if (alpha <= .03) continue;
+        const a = nodeById.get(link.source);
+        const b = nodeById.get(link.target);
+        const highlighted = activePath && paths[activePath].nodes.includes(link.source) && paths[activePath].nodes.includes(link.target);
+        drawArrow(a, b, alpha, highlighted);
+      }
+    }
+
+    function drawArrow(a, b, alpha, highlighted) {
+      const color = highlighted ? "#0c1a2e" : (a.group === b.group ? groups[a.group].color : "#8190a6");
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.max(1, Math.hypot(dx, dy));
+      const ux = dx / dist;
+      const uy = dy / dist;
+      const startX = a.x + ux * (a.size + 5);
+      const startY = a.y + uy * (a.size + 5);
+      const endX = b.x - ux * (b.size + 8);
+      const endY = b.y - uy * (b.size + 8);
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = highlighted ? 2.8 : 1.2;
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+      const size = highlighted ? 8 : 6;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - ux * size - uy * size * .55, endY - uy * size + ux * size * .55);
+      ctx.lineTo(endX - ux * size + uy * size * .55, endY - uy * size - ux * size * .55);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawNodes() {
+      const ordered = nodes.slice().sort((a, b) => nodeVisibility(a) - nodeVisibility(b));
+      for (const node of ordered) {
+        const visibility = nodeVisibility(node);
+        if (visibility <= .03) continue;
+        const group = groups[node.group];
+        const selected = node.id === selectedId;
+        const hovered = node.id === hoveredId;
+        const inPath = activePath && paths[activePath].nodes.includes(node.id);
+        const searched = searchTerm && node.label.toLowerCase().includes(searchTerm);
+        const r = node.size + (selected ? 7 : hovered ? 4 : inPath || searched ? 3 : 0);
+        ctx.save();
+        ctx.globalAlpha = visibility;
+        ctx.shadowColor = selected || hovered ? "rgba(16,32,55,.25)" : "rgba(16,32,55,.12)";
+        ctx.shadowBlur = selected || hovered ? 22 : 9;
+        ctx.fillStyle = group.color;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = selected ? 4 : node.core ? 2.8 : 1.8;
+        ctx.strokeStyle = selected ? "#0c1a2e" : "rgba(255,255,255,.92)";
+        ctx.stroke();
+        const compact = activeMode !== "all" || activePath || activeGroup !== "all" || searchTerm;
+        if (selected || hovered || node.core || inPath || searched || compact && scale > .55) {
+          const label = trim(node.label, selected || hovered ? 24 : 16);
+          ctx.font = `${selected ? 850 : 760} ${selected ? 15 : 12}px -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif`;
+          const metrics = ctx.measureText(label);
+          const bx = node.x + r + 7;
+          const by = node.y - 11;
+          ctx.fillStyle = "rgba(255,255,255,.9)";
+          roundRect(ctx, bx - 6, by - 1, metrics.width + 12, 23, 7);
+          ctx.fill();
+          ctx.fillStyle = selected ? "#0c1a2e" : "#33445f";
+          ctx.fillText(label, bx, by + 15);
+        }
+        ctx.restore();
+      }
+    }
+
+    function nodeVisibility(node) {
+      const visible = visibleSet();
+      if (!visible.has(node.id)) return 0;
+      let value = 1;
+      if (selectedId && activeMode === "all" && !activePath && activeGroup === "all" && !searchTerm) {
+        const refs = linked.get(selectedId);
+        const close = selectedId === node.id || refs.in.some((l) => l.source === node.id) || refs.out.some((l) => l.target === node.id);
+        if (!close) value *= .45;
+      }
+      if (searchTerm && !node.label.toLowerCase().includes(searchTerm) && !node.summary.toLowerCase().includes(searchTerm)) value *= .55;
+      return value;
+    }
+
+    function edgeVisibility(link) {
+      const visible = visibleSet();
+      if (!visible.has(link.source) || !visible.has(link.target)) return 0;
+      let value = .48;
+      if (selectedId && (link.source === selectedId || link.target === selectedId)) value = .96;
+      if (activePath) value = paths[activePath].nodes.includes(link.source) && paths[activePath].nodes.includes(link.target) ? .94 : .14;
+      if (searchTerm) {
+        const a = nodeById.get(link.source);
+        const b = nodeById.get(link.target);
+        if (!a.label.toLowerCase().includes(searchTerm) && !b.label.toLowerCase().includes(searchTerm)) value *= .4;
+      }
+      return value;
+    }
+
+    function selectNode(id) {
+      selectedId = id;
+      const node = nodeById.get(id);
+      if (!node) return;
+      const group = groups[node.group];
+      const refs = linked.get(id);
+      const incoming = refs.in.map((link) => `${nodeById.get(link.source).label} - ${link.label}`);
+      const outgoing = refs.out.map((link) => `${link.label} - ${nodeById.get(link.target).label}`);
+      detailPanel.innerHTML = `
+        <div class="detail-head">
+          <div class="detail-group"><span class="dot" style="background:${group.color}"></span>${escapeHTML(group.name)}</div>
+          <h2>${escapeHTML(node.label)}</h2>
+        </div>
+        <div class="detail-card"><h3>业务含义</h3><p>${escapeHTML(node.summary)}</p></div>
+        <div class="detail-card"><h3>上游来源</h3>${listHtml(incoming, "没有上游，属于入口或基础节点。")}</div>
+        <div class="detail-card"><h3>下游去向</h3>${listHtml(outgoing, "没有下游，属于结果或沉淀节点。")}</div>
+        <div class="detail-card"><h3>读图口径</h3><p>${escapeHTML(readingNote(node))}</p></div>
+      `;
+    }
+
+    function readingNote(node) {
+      if (node.group === "settlement") return "这里是钱和佣金的归口，必须和订单状态、组织关系、外部分账口径一起看。";
+      if (node.group === "transaction") return "这里是订单生命周期，决定后续发货、售后、结算和数据沉淀。";
+      if (node.group === "cps") return "这里是内容成交链路，重点看微信小店、优选联盟、达人/推客和消费者之间怎么串起来。";
+      if (node.group === "distribution") return "这里是经销商层级关系，重点看 Vip 级别、员工归属、选品和订单汇聚。";
+      if (node.group === "invite") return "这里是商品招商层级，重点看邀请码、V 级别和高级招低级的限制。";
+      if (node.group === "supplier") return "这里是货源入口，重点看商品上架、供货中心、ERP/WMS 和供货模式。";
+      return "这里是平台控制面，负责配置规则、组织关系、商品、订单和经营分析。";
+    }
+
+    function listHtml(items, fallback) {
+      if (!items.length) return `<p>${fallback}</p>`;
+      return `<ul>${items.slice(0, 10).map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ul>`;
+    }
+
+    function pointerPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function screenToWorld(point) {
+      return { x: (point.x - offsetX) / scale, y: (point.y - offsetY) / scale };
+    }
+
+    function hitTest(point) {
+      const w = screenToWorld(point);
+      let best = null;
+      let bestDist = Infinity;
+      for (const node of nodes) {
+        const d = Math.hypot(w.x - node.x, w.y - node.y);
+        if (d < node.size + 11 && d < bestDist && nodeVisibility(node) > .08) {
+          best = node;
+          bestDist = d;
+        }
+      }
+      return best;
+    }
+
+    function pointerMove(event) {
+      const point = pointerPosition(event);
+      const worldPoint = screenToWorld(point);
+      if (dragNode) {
+        if (dragOrigin && Math.hypot(point.x - dragOrigin.x, point.y - dragOrigin.y) > 3) dragNode.pinned = true;
+        dragNode.x = clamp(worldPoint.x, 24, world.width - 24);
+        dragNode.y = clamp(worldPoint.y, 24, world.height - 24);
+        dragNode.vx = 0;
+        dragNode.vy = 0;
+        return;
+      }
+      if (isPanning && lastPointer) {
+        offsetX += point.x - lastPointer.x;
+        offsetY += point.y - lastPointer.y;
+        lastPointer = point;
+        return;
+      }
+      const hit = hitTest(point);
+      hoveredId = hit ? hit.id : null;
+      canvas.style.cursor = hit ? "pointer" : "grab";
+    }
+
+    function pointerDown(event) {
+      const point = pointerPosition(event);
+      const hit = hitTest(point);
+      if (hit) {
+        dragNode = hit;
+        selectNode(hit.id);
+      } else {
+        isPanning = true;
+      }
+      lastPointer = point;
+      dragOrigin = point;
+      canvas.setPointerCapture(event.pointerId);
+    }
+
+    function pointerUp(event) {
+      dragNode = null;
+      isPanning = false;
+      lastPointer = null;
+      dragOrigin = null;
+      if (event && canvas.hasPointerCapture && canvas.hasPointerCapture(event.pointerId)) {
+        canvas.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function trim(value, max) {
+      return value.length > max ? `${value.slice(0, max - 1)}…` : value;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function roundRect(context, x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      context.beginPath();
+      context.moveTo(x + radius, y);
+      context.arcTo(x + w, y, x + w, y + h, radius);
+      context.arcTo(x + w, y + h, x, y + h, radius);
+      context.arcTo(x, y + h, x, y, radius);
+      context.arcTo(x, y, x + w, y, radius);
+      context.closePath();
+    }
+
+    setup();
+  </script>
+</body>
+</html>

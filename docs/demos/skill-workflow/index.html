@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPC Figma 每日技术同步工作流图</title>
+  <style>
+    :root { --bg:#f5f7fa; --panel:#fff; --ink:#101418; --muted:#5f6b7a; --line:#d8e0e8; --accent:#ccff00; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--ink); background:var(--bg); letter-spacing:0; }
+    header { background:#111; color:#fff; padding:28px 32px 22px; }
+    h1 { margin:0 0 8px; font-size:26px; line-height:1.25; }
+    .sub { color:#d7dde5; font-size:14px; line-height:1.7; max-width:980px; }
+    main { max-width:1180px; margin:0 auto; padding:22px; }
+    .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-bottom:18px; }
+    .toc a { display:block; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#111; text-decoration:none; font-weight:700; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:18px; margin:14px 0; overflow:auto; box-shadow:0 1px 2px rgba(16,24,40,.04); }
+    .panel-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .panel-head span { display:inline-flex; align-items:center; justify-content:center; width:34px; height:28px; border-radius:999px; background:var(--accent); font-weight:800; }
+    h2 { margin:0; font-size:18px; }
+    .mermaid { min-width:720px; padding:12px; border:1px solid #edf1f5; border-radius:8px; background:#fbfcfd; }
+    details { margin-top:12px; }
+    summary { cursor:pointer; color:var(--muted); font-weight:700; }
+    pre { white-space:pre-wrap; word-break:break-word; background:#f0f3f6; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:13px; line-height:1.55; }
+    .note { background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:16px; line-height:1.75; }
+    @media (max-width:800px) { header{padding:22px 18px;} main{padding:14px;} .mermaid{min-width:640px;} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OPC Figma 每日技术同步工作流图</h1>
+    <div class="sub">这页是给产品、技术和项目跟进看的。重点看：每日抓取、每日技术同步、大陆交付表达三套 skill 怎么配合，以及交付前怎么检查。</div>
+  </header>
+  <main>
+    <div class="note"><b>打开说明：</b>页面会尝试渲染 Mermaid 图。如果网络或浏览器临时拦住 Mermaid，也可以点每张图下面的“查看 Mermaid 源码”。</div>
+    <nav class="toc"><a href="#chart-1">1. 这份文档给谁看</a><a href="#chart-2">2. 2. 三个 skill 怎么配合</a><a href="#chart-3">3. 3. 每日技术同步 skill 怎么走</a><a href="#chart-4">4. 4. 技术同步日报应该包含什么</a><a href="#chart-5">5. 5. 生成脚本实际做什么</a><a href="#chart-6">6. 6. 聊天记录怎么整理成能看的内容</a><a href="#chart-7">7. 7. 大陆交付表达 skill 怎么用</a><a href="#chart-8">8. 8. 每日抓取 skill 怎么走</a><a href="#chart-9">9. 9. 正式结果包和临时核对怎么区分</a><a href="#chart-10">10. 10. 交付前怎么检查</a></nav>
+    
+<section class="panel" id="chart-1">
+  <div class="panel-head">
+    <span>01</span>
+    <h2>这份文档给谁看</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;用户问：今天 Figma 做了什么&quot;] --&gt; B[&quot;先看有没有当天正式结果包&quot;]
+    B --&gt; C{&quot;有没有正式结果包&quot;}
+    C --&gt;|有| D[&quot;读取这次结果包&quot;]
+    C --&gt;|没有| E[&quot;只说明：今天没有可用结果包&quot;]
+    D --&gt; F[&quot;找到上一个正式结果包&quot;]
+    F --&gt; G[&quot;对比这次和上一次&quot;]
+    G --&gt; H[&quot;整理六个包各自变化&quot;]
+    H --&gt; I[&quot;整理哪些模块业务逻辑变了&quot;]
+    I --&gt; J[&quot;整理新增或修改的文件&quot;]
+    J --&gt; K[&quot;写成技术团队能看的日报&quot;]
+    E --&gt; K
+    K --&gt; L[&quot;生成 Markdown&quot;]
+    K --&gt; M[&quot;生成 H5&quot;]
+    K --&gt; N[&quot;生成数据文件&quot;]
+    L --&gt; O[&quot;检查内容是否能直接发给技术&quot;]
+    M --&gt; O
+    N --&gt; O
+    O --&gt; P[&quot;把路径和关键结论发给用户&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;用户问：今天 Figma 做了什么&quot;] --&gt; B[&quot;先看有没有当天正式结果包&quot;]
+    B --&gt; C{&quot;有没有正式结果包&quot;}
+    C --&gt;|有| D[&quot;读取这次结果包&quot;]
+    C --&gt;|没有| E[&quot;只说明：今天没有可用结果包&quot;]
+    D --&gt; F[&quot;找到上一个正式结果包&quot;]
+    F --&gt; G[&quot;对比这次和上一次&quot;]
+    G --&gt; H[&quot;整理六个包各自变化&quot;]
+    H --&gt; I[&quot;整理哪些模块业务逻辑变了&quot;]
+    I --&gt; J[&quot;整理新增或修改的文件&quot;]
+    J --&gt; K[&quot;写成技术团队能看的日报&quot;]
+    E --&gt; K
+    K --&gt; L[&quot;生成 Markdown&quot;]
+    K --&gt; M[&quot;生成 H5&quot;]
+    K --&gt; N[&quot;生成数据文件&quot;]
+    L --&gt; O[&quot;检查内容是否能直接发给技术&quot;]
+    M --&gt; O
+    N --&gt; O
+    O --&gt; P[&quot;把路径和关键结论发给用户&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-2">
+  <div class="panel-head">
+    <span>02</span>
+    <h2>2. 三个 skill 怎么配合</h2>
+  </div>
+  <div class="mermaid">flowchart LR
+    A[&quot;每日抓取 skill&quot;] --&gt; B[&quot;把六个包的聊天记录存到证据目录&quot;]
+    B --&gt; C[&quot;每日技术同步 skill&quot;]
+    D[&quot;大陆交付表达 skill&quot;] --&gt; C
+    C --&gt; E[&quot;生成技术同步 Markdown&quot;]
+    C --&gt; F[&quot;生成技术同步 H5&quot;]
+    C --&gt; G[&quot;生成给后续分析用的数据文件&quot;]
+    H[&quot;用户临时问抓取有没有跑&quot;] --&gt; I[&quot;只在对话里说明&quot;]
+    I -. &quot;不写进 H5&quot; .-&gt; F</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart LR
+    A[&quot;每日抓取 skill&quot;] --&gt; B[&quot;把六个包的聊天记录存到证据目录&quot;]
+    B --&gt; C[&quot;每日技术同步 skill&quot;]
+    D[&quot;大陆交付表达 skill&quot;] --&gt; C
+    C --&gt; E[&quot;生成技术同步 Markdown&quot;]
+    C --&gt; F[&quot;生成技术同步 H5&quot;]
+    C --&gt; G[&quot;生成给后续分析用的数据文件&quot;]
+    H[&quot;用户临时问抓取有没有跑&quot;] --&gt; I[&quot;只在对话里说明&quot;]
+    I -. &quot;不写进 H5&quot; .-&gt; F</pre></details>
+</section>
+
+<section class="panel" id="chart-3">
+  <div class="panel-head">
+    <span>03</span>
+    <h2>3. 每日技术同步 skill 怎么走</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;开始整理每日技术同步&quot;] --&gt; B[&quot;确认要看哪一天&quot;]
+    B --&gt; C{&quot;用户有没有指定日期&quot;}
+    C --&gt;|指定了| D[&quot;找这一天最新的正式结果包&quot;]
+    C --&gt;|没指定| E[&quot;找当前最新的正式结果包&quot;]
+    D --&gt; F[&quot;找它前面的那个正式结果包&quot;]
+    E --&gt; F
+    F --&gt; G{&quot;这一天有没有正式结果包&quot;}
+    G --&gt;|有| H[&quot;读取六个包的版本范围&quot;]
+    G --&gt;|没有| I[&quot;写清楚：没有正式结果包，不能判断变化&quot;]
+    H --&gt; J[&quot;读取每个包的聊天记录&quot;]
+    J --&gt; K[&quot;整理今日新增或修改点&quot;]
+    K --&gt; L[&quot;整理涉及哪些文件&quot;]
+    L --&gt; M[&quot;按模块判断业务逻辑有没有变化&quot;]
+    M --&gt; N[&quot;生成日报&quot;]
+    I --&gt; N
+    N --&gt; O[&quot;给用户 H5 和文档路径&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;开始整理每日技术同步&quot;] --&gt; B[&quot;确认要看哪一天&quot;]
+    B --&gt; C{&quot;用户有没有指定日期&quot;}
+    C --&gt;|指定了| D[&quot;找这一天最新的正式结果包&quot;]
+    C --&gt;|没指定| E[&quot;找当前最新的正式结果包&quot;]
+    D --&gt; F[&quot;找它前面的那个正式结果包&quot;]
+    E --&gt; F
+    F --&gt; G{&quot;这一天有没有正式结果包&quot;}
+    G --&gt;|有| H[&quot;读取六个包的版本范围&quot;]
+    G --&gt;|没有| I[&quot;写清楚：没有正式结果包，不能判断变化&quot;]
+    H --&gt; J[&quot;读取每个包的聊天记录&quot;]
+    J --&gt; K[&quot;整理今日新增或修改点&quot;]
+    K --&gt; L[&quot;整理涉及哪些文件&quot;]
+    L --&gt; M[&quot;按模块判断业务逻辑有没有变化&quot;]
+    M --&gt; N[&quot;生成日报&quot;]
+    I --&gt; N
+    N --&gt; O[&quot;给用户 H5 和文档路径&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-4">
+  <div class="panel-head">
+    <span>04</span>
+    <h2>4. 技术同步日报应该包含什么</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;技术同步日报&quot;] --&gt; B[&quot;今日概览&quot;]
+    A --&gt; C[&quot;和上一个结果包对比&quot;]
+    A --&gt; D[&quot;按包汇总&quot;]
+    A --&gt; E[&quot;按模块汇总&quot;]
+    A --&gt; F[&quot;文件变化清单&quot;]
+    B --&gt; G[&quot;今天看了多少版本&quot;]
+    B --&gt; H[&quot;六个包里哪几个有变化&quot;]
+    C --&gt; I[&quot;上一版范围、当前范围、差了多少版本&quot;]
+    D --&gt; J[&quot;每个包主要改了什么&quot;]
+    E --&gt; K[&quot;这个模块原来的业务逻辑是什么&quot;]
+    E --&gt; L[&quot;今天有没有调整整体逻辑&quot;]
+    E --&gt; M[&quot;还有哪些没做完或待确认&quot;]
+    F --&gt; N[&quot;新增、修改、删除、重命名分别列清楚&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;技术同步日报&quot;] --&gt; B[&quot;今日概览&quot;]
+    A --&gt; C[&quot;和上一个结果包对比&quot;]
+    A --&gt; D[&quot;按包汇总&quot;]
+    A --&gt; E[&quot;按模块汇总&quot;]
+    A --&gt; F[&quot;文件变化清单&quot;]
+    B --&gt; G[&quot;今天看了多少版本&quot;]
+    B --&gt; H[&quot;六个包里哪几个有变化&quot;]
+    C --&gt; I[&quot;上一版范围、当前范围、差了多少版本&quot;]
+    D --&gt; J[&quot;每个包主要改了什么&quot;]
+    E --&gt; K[&quot;这个模块原来的业务逻辑是什么&quot;]
+    E --&gt; L[&quot;今天有没有调整整体逻辑&quot;]
+    E --&gt; M[&quot;还有哪些没做完或待确认&quot;]
+    F --&gt; N[&quot;新增、修改、删除、重命名分别列清楚&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-5">
+  <div class="panel-head">
+    <span>05</span>
+    <h2>5. 生成脚本实际做什么</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;运行生成脚本&quot;] --&gt; B[&quot;确认要用哪个结果包&quot;]
+    B --&gt; C[&quot;找到上一个结果包&quot;]
+    C --&gt; D{&quot;这次有没有正式结果包&quot;}
+    D --&gt;|没有| E[&quot;生成无结果包说明&quot;]
+    D --&gt;|有| F[&quot;读取六个包的版本范围&quot;]
+    F --&gt; G[&quot;逐个版本读取聊天记录&quot;]
+    G --&gt; H[&quot;提取业务变化&quot;]
+    G --&gt; I[&quot;提取文件变化&quot;]
+    H --&gt; J[&quot;按包整理&quot;]
+    H --&gt; K[&quot;按模块整理&quot;]
+    I --&gt; J
+    J --&gt; L[&quot;生成数据文件&quot;]
+    K --&gt; M[&quot;生成 Markdown&quot;]
+    K --&gt; N[&quot;生成 H5&quot;]
+    E --&gt; L
+    E --&gt; M
+    E --&gt; N</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;运行生成脚本&quot;] --&gt; B[&quot;确认要用哪个结果包&quot;]
+    B --&gt; C[&quot;找到上一个结果包&quot;]
+    C --&gt; D{&quot;这次有没有正式结果包&quot;}
+    D --&gt;|没有| E[&quot;生成无结果包说明&quot;]
+    D --&gt;|有| F[&quot;读取六个包的版本范围&quot;]
+    F --&gt; G[&quot;逐个版本读取聊天记录&quot;]
+    G --&gt; H[&quot;提取业务变化&quot;]
+    G --&gt; I[&quot;提取文件变化&quot;]
+    H --&gt; J[&quot;按包整理&quot;]
+    H --&gt; K[&quot;按模块整理&quot;]
+    I --&gt; J
+    J --&gt; L[&quot;生成数据文件&quot;]
+    K --&gt; M[&quot;生成 Markdown&quot;]
+    K --&gt; N[&quot;生成 H5&quot;]
+    E --&gt; L
+    E --&gt; M
+    E --&gt; N</pre></details>
+</section>
+
+<section class="panel" id="chart-6">
+  <div class="panel-head">
+    <span>06</span>
+    <h2>6. 聊天记录怎么整理成能看的内容</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;读取聊天记录&quot;] --&gt; B[&quot;先过滤执行过程话&quot;]
+    B --&gt; C[&quot;保留需求、页面、按钮、状态、文件、验收这些内容&quot;]
+    C --&gt; D[&quot;按业务模块归类&quot;]
+    D --&gt; E{&quot;能不能看出模块变化&quot;}
+    E --&gt;|能| F[&quot;写清楚原逻辑和新变化&quot;]
+    E --&gt;|不能| G[&quot;标记为无法判断或待确认&quot;]
+    F --&gt; H[&quot;整理给技术看的结论&quot;]
+    G --&gt; H
+    H --&gt; I[&quot;写进日报&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;读取聊天记录&quot;] --&gt; B[&quot;先过滤执行过程话&quot;]
+    B --&gt; C[&quot;保留需求、页面、按钮、状态、文件、验收这些内容&quot;]
+    C --&gt; D[&quot;按业务模块归类&quot;]
+    D --&gt; E{&quot;能不能看出模块变化&quot;}
+    E --&gt;|能| F[&quot;写清楚原逻辑和新变化&quot;]
+    E --&gt;|不能| G[&quot;标记为无法判断或待确认&quot;]
+    F --&gt; H[&quot;整理给技术看的结论&quot;]
+    G --&gt; H
+    H --&gt; I[&quot;写进日报&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-7">
+  <div class="panel-head">
+    <span>07</span>
+    <h2>7. 大陆交付表达 skill 怎么用</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;开始写中文交付物&quot;] --&gt; B[&quot;先想清楚给谁看&quot;]
+    B --&gt; C[&quot;按真实工作顺序写&quot;]
+    C --&gt; D[&quot;写清材料从哪来&quot;]
+    D --&gt; E[&quot;写清我们实际看到什么&quot;]
+    E --&gt; F[&quot;写清还缺什么&quot;]
+    F --&gt; G[&quot;写清谁来确认&quot;]
+    G --&gt; H[&quot;写清下一步怎么做&quot;]
+    H --&gt; I[&quot;把抽象词换成日常协作话&quot;]
+    I --&gt; J[&quot;检查技术拿到后能不能知道怎么改、怎么验收&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;开始写中文交付物&quot;] --&gt; B[&quot;先想清楚给谁看&quot;]
+    B --&gt; C[&quot;按真实工作顺序写&quot;]
+    C --&gt; D[&quot;写清材料从哪来&quot;]
+    D --&gt; E[&quot;写清我们实际看到什么&quot;]
+    E --&gt; F[&quot;写清还缺什么&quot;]
+    F --&gt; G[&quot;写清谁来确认&quot;]
+    G --&gt; H[&quot;写清下一步怎么做&quot;]
+    H --&gt; I[&quot;把抽象词换成日常协作话&quot;]
+    I --&gt; J[&quot;检查技术拿到后能不能知道怎么改、怎么验收&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-8">
+  <div class="panel-head">
+    <span>08</span>
+    <h2>8. 每日抓取 skill 怎么走</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;开始每日抓取&quot;] --&gt; B[&quot;读取六个包上次保存到哪里&quot;]
+    B --&gt; C[&quot;后台打开 Figma 网页版&quot;]
+    C --&gt; D[&quot;看每个包现在最新到哪个版本&quot;]
+    D --&gt; E{&quot;有没有新版本&quot;}
+    E --&gt;|没有| F[&quot;这个包记为无新增&quot;]
+    E --&gt;|有| G[&quot;只抓新增的那一段&quot;]
+    G --&gt; H[&quot;保存每个版本的聊天记录&quot;]
+    H --&gt; I[&quot;保存每个版本的原始材料&quot;]
+    I --&gt; J[&quot;更新这个包的保存位置&quot;]
+    J --&gt; K[&quot;写本次抓取结果包&quot;]
+    F --&gt; K
+    K --&gt; L[&quot;检查六个包都处理过&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;开始每日抓取&quot;] --&gt; B[&quot;读取六个包上次保存到哪里&quot;]
+    B --&gt; C[&quot;后台打开 Figma 网页版&quot;]
+    C --&gt; D[&quot;看每个包现在最新到哪个版本&quot;]
+    D --&gt; E{&quot;有没有新版本&quot;}
+    E --&gt;|没有| F[&quot;这个包记为无新增&quot;]
+    E --&gt;|有| G[&quot;只抓新增的那一段&quot;]
+    G --&gt; H[&quot;保存每个版本的聊天记录&quot;]
+    H --&gt; I[&quot;保存每个版本的原始材料&quot;]
+    I --&gt; J[&quot;更新这个包的保存位置&quot;]
+    J --&gt; K[&quot;写本次抓取结果包&quot;]
+    F --&gt; K
+    K --&gt; L[&quot;检查六个包都处理过&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-9">
+  <div class="panel-head">
+    <span>09</span>
+    <h2>9. 正式结果包和临时核对怎么区分</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;用户问今天有没有变化&quot;] --&gt; B{&quot;有没有正式结果包&quot;}
+    B --&gt;|有| C[&quot;可以出日报&quot;]
+    B --&gt;|没有| D[&quot;不能出业务变化结论&quot;]
+    D --&gt; E{&quot;用户只是问有没有跑过&quot;}
+    E --&gt;|是| F[&quot;在对话里说明看到什么&quot;]
+    E --&gt;|不是| G[&quot;告诉用户需要先补正式结果包&quot;]
+    F --&gt; H[&quot;不写进 H5&quot;]
+    G --&gt; H
+    C --&gt; I[&quot;按正式结果包整理变化&quot;]</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;用户问今天有没有变化&quot;] --&gt; B{&quot;有没有正式结果包&quot;}
+    B --&gt;|有| C[&quot;可以出日报&quot;]
+    B --&gt;|没有| D[&quot;不能出业务变化结论&quot;]
+    D --&gt; E{&quot;用户只是问有没有跑过&quot;}
+    E --&gt;|是| F[&quot;在对话里说明看到什么&quot;]
+    E --&gt;|不是| G[&quot;告诉用户需要先补正式结果包&quot;]
+    F --&gt; H[&quot;不写进 H5&quot;]
+    G --&gt; H
+    C --&gt; I[&quot;按正式结果包整理变化&quot;]</pre></details>
+</section>
+
+<section class="panel" id="chart-10">
+  <div class="panel-head">
+    <span>10</span>
+    <h2>10. 交付前怎么检查</h2>
+  </div>
+  <div class="mermaid">flowchart TD
+    A[&quot;生成 Markdown、H5、数据文件&quot;] --&gt; B[&quot;检查六个包是否都在&quot;]
+    B --&gt; C[&quot;检查是否和上一个正式结果包对比&quot;]
+    C --&gt; D[&quot;检查状态是不是中文&quot;]
+    D --&gt; E[&quot;检查有没有把执行过程话写进去&quot;]
+    E --&gt; F[&quot;检查有没有把临时核对内容写进 H5&quot;]
+    F --&gt; G{&quot;检查是否通过&quot;}
+    G --&gt;|通过| H[&quot;把路径发给用户&quot;]
+    G --&gt;|不通过| I[&quot;回去改清洗规则或文案&quot;]
+    I --&gt; A</div>
+  <details><summary>查看 Mermaid 源码</summary><pre>flowchart TD
+    A[&quot;生成 Markdown、H5、数据文件&quot;] --&gt; B[&quot;检查六个包是否都在&quot;]
+    B --&gt; C[&quot;检查是否和上一个正式结果包对比&quot;]
+    C --&gt; D[&quot;检查状态是不是中文&quot;]
+    D --&gt; E[&quot;检查有没有把执行过程话写进去&quot;]
+    E --&gt; F[&quot;检查有没有把临时核对内容写进 H5&quot;]
+    F --&gt; G{&quot;检查是否通过&quot;}
+    G --&gt;|通过| H[&quot;把路径发给用户&quot;]
+    G --&gt;|不通过| I[&quot;回去改清洗规则或文案&quot;]
+    I --&gt; A</pre></details>
+</section>
+  </main>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, securityLevel: 'loose', theme: 'default', flowchart: { useMaxWidth: false, htmlLabels: true } });
+  </script>
+</body>
+</html>

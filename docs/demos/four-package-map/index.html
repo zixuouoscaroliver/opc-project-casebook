@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>四包功能归属展示说明</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --paper: #ffffff;
+      --ink: #182033;
+      --muted: #647084;
+      --line: #dfe4ee;
+      --green: #0f9f6e;
+      --green-soft: #e7f7ef;
+      --blue: #246bfe;
+      --blue-soft: #eaf0ff;
+      --orange: #d97706;
+      --orange-soft: #fff4e4;
+      --purple: #7c3aed;
+      --purple-soft: #f1eaff;
+      --red: #dc2626;
+      --red-soft: #feecec;
+      --radius: 14px;
+      --shadow: 0 18px 48px rgba(24, 32, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.72;
+    }
+
+    .page { max-width: 1180px; margin: 0 auto; padding: 28px 18px 56px; }
+    .hero {
+      background: linear-gradient(135deg, #122034, #203a5c);
+      color: #fff;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    .eyebrow { margin: 0 0 10px; color: #b9d3ff; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; }
+    h1 { margin: 0; font-size: 34px; line-height: 1.22; letter-spacing: 0; }
+    .hero p { margin: 14px 0 0; max-width: 860px; color: #e8eefb; font-size: 16px; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .meta span {
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: #f7fbff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin: 18px 0;
+      background: rgba(246,247,251,0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .nav-inner {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .nav a {
+      white-space: nowrap;
+      text-decoration: none;
+      color: #263247;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin: 18px 0;
+      box-shadow: 0 10px 30px rgba(24, 32, 51, 0.04);
+    }
+    h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.35; }
+    h4 { margin: 18px 0 8px; font-size: 15px; }
+    p { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; }
+
+    .grid { display: grid; gap: 14px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .card strong { display: block; margin-bottom: 6px; font-size: 15px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      margin: 2px 4px 2px 0;
+      border: 1px solid transparent;
+    }
+    .tag.green { background: var(--green-soft); color: var(--green); border-color: #bfead4; }
+    .tag.blue { background: var(--blue-soft); color: var(--blue); border-color: #cbd8ff; }
+    .tag.orange { background: var(--orange-soft); color: var(--orange); border-color: #fed7aa; }
+    .tag.purple { background: var(--purple-soft); color: var(--purple); border-color: #ddd0ff; }
+    .tag.red { background: var(--red-soft); color: var(--red); border-color: #fecaca; }
+    .tag.gray { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .flow-step {
+      position: relative;
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: #fbfcff;
+      min-height: 150px;
+    }
+    .flow-step .num {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #182033;
+      color: #fff;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      font-size: 14px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f7f9fd; color: #29364d; font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+    .table-wrap { overflow-x: auto; }
+
+    .pkg-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .pkg-title { display: flex; flex-direction: column; gap: 4px; }
+    .pkg-title h2 { margin: 0; }
+    .package-platform { border-top: 5px solid var(--blue); }
+    .package-copy { border-top: 5px solid var(--green); }
+    .package-marketing { border-top: 5px solid var(--purple); }
+    .package-ops { border-top: 5px solid var(--orange); }
+
+    .function-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .function {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .function h3 { display: flex; align-items: center; gap: 8px; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .function dl { margin: 10px 0 0; }
+    .function dt { font-size: 12px; color: var(--muted); font-weight: 900; margin-top: 8px; }
+    .function dd { margin: 2px 0 0; }
+
+    .callout {
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: #fffaf0;
+      border: 1px solid #fed7aa;
+      color: #713f12;
+      margin: 12px 0;
+    }
+    .callout.blue { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
+    .callout.red { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; }
+
+    .source {
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 10px;
+      border-top: 1px dashed var(--line);
+      margin-top: 14px;
+    }
+
+    @media (max-width: 920px) {
+      .grid-2, .grid-4, .flow, .function-list { grid-template-columns: 1fr; }
+      h1 { font-size: 27px; }
+      section, .hero { padding: 18px; }
+      .page { padding: 16px 12px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">OPC 四包功能归属展示说明 · 按现有包内材料整理</p>
+      <h1>平台配置、平台配置_Copy、营销推广、日常运营：功能归属与端侧展示</h1>
+      <p>这份 H5 按现有前端包盘点、包级对比清单和工作区规则整理。重点说明每个功能在什么场景下存在、由哪个包主责、PC 端和小程序端分别怎么看。</p>
+      <div class="meta">
+        <span>范围：4 个包</span>
+        <span>依据：2026-05-22 最新前端包盘点</span>
+        <span>口径：有材料/有组件不等于业务闭环完成</span>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="#quick">先看结论</a>
+        <a href="#scope">端侧口径</a>
+        <a href="#selection">选品与采购</a>
+        <a href="#flow">场景导航</a>
+        <a href="#platform">平台配置</a>
+        <a href="#copy">平台配置_Copy</a>
+        <a href="#marketing">营销推广</a>
+        <a href="#ops">日常运营</a>
+        <a href="#matrix">功能归属表</a>
+        <a href="#rules">展示判断规则</a>
+      </div>
+    </nav>
+
+    <section id="quick">
+      <h2>一、先看结论</h2>
+      <p>四个包可以先按一句话理解：</p>
+      <div class="grid grid-4">
+        <div class="card">
+          <span class="tag blue">平台配置</span>
+          <strong>平台规则中心</strong>
+          <p class="muted">负责平台级规则、模板、系统设置、分润/结算规则、供应商准入入口。</p>
+        </div>
+        <div class="card">
+          <span class="tag green">平台配置_Copy</span>
+          <strong>商品从采购到上架的工作台</strong>
+          <p class="muted">负责进货采购、上架配置、库存、CPS 履约、订单、批量操作。</p>
+        </div>
+        <div class="card">
+          <span class="tag purple">营销推广</span>
+          <strong>对外推广和传播中心</strong>
+          <p class="muted">负责 AI 素材、推广任务、活动、裂变、视频号推客、推广效果。</p>
+        </div>
+        <div class="card">
+          <span class="tag orange">日常运营</span>
+          <strong>每天怎么运营的工作台</strong>
+          <p class="muted">负责今日待办、签到、任务、运营标签维护、数据看板、活动执行跟进。</p>
+        </div>
+      </div>
+      <div class="callout blue">
+        展示判断法：如果是在“定规则”，优先看平台配置；如果是在“把货买来并上架”，看平台配置_Copy；如果是在“拉人传播和推广”，看营销推广；如果是在“每天运营人员要做什么”，看日常运营。
+      </div>
+    </section>
+
+    <section id="scope">
+      <h2>二、PC 端 / 小程序端展示口径</h2>
+      <p>这四个包里同时出现 PC 端管理页面和小程序端页面。文档里统一按下面口径展示，避免只按小程序端理解。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>端侧</th>
+              <th>主要用途</th>
+              <th>常见页面/组件证据</th>
+              <th>展示时怎么理解</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PC 端</td>
+              <td>偏后台、配置、管理、审核、数据看板</td>
+              <td>MainApp、Dashboard、EnhancedDashboard、ProductCenter、SystemConfig、MarketingCenter、DataAnalyticsHub 等</td>
+              <td>适合展示平台管理人员或运营人员在电脑上配置规则、看数据、做管理动作。</td>
+            </tr>
+            <tr>
+              <td>小程序端</td>
+              <td>偏移动端操作、代理侧/用户侧动作、快速查看和提交</td>
+              <td>MiniAppRender、MiniAgentPurchase、MiniListingConfigCenter、MiniMarketingCenter、MiniTaskCenter、MiniProductDetail 等</td>
+              <td>适合展示代理、运营人员或移动端角色在手机上选品、采购、推广、做任务。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout blue">
+        说明：包内有 PC 端或小程序端组件，只能说明“有材料/有页面雏形”。是否可上线，还要继续看页面实跑、接口、保存回显和刷新保留。
+      </div>
+    </section>
+
+    <section id="selection">
+      <h2>三、选品中心和进货采购为什么不冲突</h2>
+      <p>这两个词容易混在一起，但在现有包里不是同一个层级。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>名称</th>
+              <th>真实含义</th>
+              <th>主责包</th>
+              <th>和另一个的关系</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>商品/选品中心</td>
+              <td>平台商品池、商品库、商品详情、商品审核或选择推广对象</td>
+              <td>平台配置为主；营销推广里只作为推广对象来源</td>
+              <td>它回答“有哪些商品可以看/选”。</td>
+            </tr>
+            <tr>
+              <td>进货采购</td>
+              <td>把选中的商品加入进货清单、生成采购单、形成已采购/库存/订单状态</td>
+              <td>平台配置_Copy</td>
+              <td>它回答“选中后怎么采购、下单、入库、上架”。</td>
+            </tr>
+            <tr>
+              <td>进货采购里的选品中心</td>
+              <td>是进货采购流程的第一个 Tab/入口，用来从商品池里挑货</td>
+              <td>平台配置_Copy</td>
+              <td>它不是另一个独立功能，而是进货采购流程的第一步。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        所以不冲突：平台配置里的“商品/选品中心”偏商品池和平台管理；平台配置_Copy 里的“进货采购”包含一个“选品入口”，是采购流程第一步。
+      </div>
+    </section>
+
+    <section id="flow">
+      <h2>四、场景导航</h2>
+      <p>这里不是说四个包一定按线性流程上线，而是用场景帮助展示各包边界。</p>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="num">1</div>
+          <h3>先定平台规则</h3>
+          <p><span class="tag blue">平台配置</span></p>
+          <p>先把平台规则、分润/模板、结算、供应商准入、系统设置等底层规则定好。</p>
+        </div>
+        <div class="flow-step">
+          <div class="num">2</div>
+          <h3>再把商品配置成可卖</h3>
+          <p><span class="tag green">平台配置_Copy</span></p>
+          <p>完成进货、订单、库存、上架配置、CPS 履约、批量上下架等动作。</p>
+        </div>
+        <div class="flow-step">
+          <div class="num">3</div>
+          <h3>然后做推广传播</h3>
+          <p><span class="tag purple">营销推广</span></p>
+          <p>生成素材、配置活动、发推广任务、做裂变、视频号推客和推广数据回传。</p>
+        </div>
+        <div class="flow-step">
+          <div class="num">4</div>
+          <h3>最后每天运营跟进</h3>
+          <p><span class="tag orange">日常运营</span></p>
+          <p>看今日任务、签到、标签维护、数据预警、活动执行进度和运营结果。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform" class="package-platform">
+      <div class="pkg-header">
+        <div class="pkg-title">
+          <h2>五、平台配置包</h2>
+          <p class="muted">场景：平台要先把规则定好，后面的采购、上架、推广、运营才有统一口径。</p>
+        </div>
+        <span class="tag blue">平台规则中心</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>端侧</th>
+              <th>本包展示重点</th>
+              <th>典型证据/页面</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PC 端</td>
+              <td>平台规则、商品库、分润模板、结算、系统设置、审核入口</td>
+              <td>MainApp、Dashboard、ProductCenter、SystemConfig、TemplateManager、EnhancedDashboard</td>
+            </tr>
+            <tr>
+              <td>小程序端</td>
+              <td>平台侧移动查看、商品详情、平台商品中心、审核详情等移动端入口</td>
+              <td>MiniAppRender、MiniPlatformProductCenter、MiniProductDetail、MiniProductAuditDetail</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="function-list">
+        <article class="function">
+          <h3>商品/选品中心（平台商品池） <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>让平台知道商品从哪里来、怎么进入商品库、怎么查看详情和审核状态。</dd>
+            <dt>使用场景</dt>
+            <dd>平台侧看商品库、选品、商品详情、平台审核，以及进入后续配置入口。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>不要展开成代理进货采购，也不要做完整库存入库。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>分润配置 / 分润模板管理 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>配置分润规则、模板、商品关联、生效范围和保存回显。</dd>
+            <dt>使用场景</dt>
+            <dd>代理商侧 D1/D2 分润、供应商/平台相关分润模板、默认模板、商品绑定模板等规则配置。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>不要放进营销推广；不要在平台配置_Copy 里重做分润主页面。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>佣金/结算 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>让平台看清收益、结算、提现、结算状态和异常处理。</dd>
+            <dt>使用场景</dt>
+            <dd>平台查看收益概览、结算明细、提现入口和结算状态。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>日常运营可以看数据入口，但不要替代结算系统。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>供应链/云仓规则 <span class="pill">规则</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>配置平台级供货、库存预警、云仓规则和默认仓储设置。</dd>
+            <dt>使用场景</dt>
+            <dd>平台定规则，例如库存预警、供货规则、默认仓库，而不是具体某个商品入库。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>具体库存详情、手动入库/出库归平台配置_Copy。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>批量操作规则 <span class="pill">规则</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>定义平台商品批量配置规则，例如批量编辑配置、批量规则调整。</dd>
+            <dt>使用场景</dt>
+            <dd>平台统一调整商品配置规则、模板、标签或平台级字段。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>代理侧批量上架、批量下架、批量补货归平台配置_Copy。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>平台模式与系统设置 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>平台需要统一入口来配置模式、系统设置、平台规则和角色边界。</dd>
+            <dt>使用场景</dt>
+            <dd>D1-D5 渠道代理模式、系统设置项、平台配置首页和入口管理。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>不要把日常任务、采购库存、推广任务直接塞进系统设置。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>供应商准入入口 <span class="pill">入口/规则</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>平台配置里需要有供应商准入规则、邀请入口、审核入口。</dd>
+            <dt>使用场景</dt>
+            <dd>平台设置供应商能不能进入、怎么邀请、审核入口在哪里。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>完整供应商入驻、订单、绩效、结算不在这四包范围内展开。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>供应商商品管理入口 <span class="pill">入口/审核</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>平台要能看到供应商提交的商品并做审核入口管理。</dd>
+            <dt>使用场景</dt>
+            <dd>平台商品审核、商品详情查看、审核规则入口。</dd>
+            <dt>不要混到哪里</dt>
+            <dd>供应商侧商品提交、上下架和履约不要放在平台配置包里展开。</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section id="copy" class="package-copy">
+      <div class="pkg-header">
+        <div class="pkg-title">
+          <h2>六、平台配置_Copy 包</h2>
+          <p class="muted">场景：商品已经被选中后，完成进货、上架、库存、订单和履约动作。</p>
+        </div>
+        <span class="tag green">采购到上架工作台</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>端侧</th>
+              <th>本包展示重点</th>
+              <th>典型证据/页面</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PC 端</td>
+              <td>采购/库存/上架配置相关管理页或数据看板入口</td>
+              <td>ProductCenter、AIOptimizationTracker、ProfitSharing、MainApp 类页面</td>
+            </tr>
+            <tr>
+              <td>小程序端</td>
+              <td>代理侧选品、进货清单、我的订单、上架配置、库存详情、手动入库/出库</td>
+              <td>MiniAgentPurchase、PurchaseListTab、MiniListingConfigCenter、StockDetailView、ManualStockInDialog、ManualStockOutDialog</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="function-list">
+        <article class="function">
+          <h3>进货采购（含选品入口） <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>代理或平台要从商品池里选择商品，形成进货清单、采购单和已采购商品。</dd>
+            <dt>使用场景</dt>
+            <dd>进货采购里的选品入口、进货清单、已采购商品、进货订单、销售订单、下级订单。</dd>
+            <dt>边界</dt>
+            <dd>收藏、进货清单、已采购、库存要分清；不能用本地库存冒充真实采购闭环。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>上架配置 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>商品采购后，需要配置价格、渠道、库存、CPS、授权条件后才能正式开卖。</dd>
+            <dt>使用场景</dt>
+            <dd>待配置池、已配置待发布、已上架已开卖、组合套餐门槛礼包。</dd>
+            <dt>边界</dt>
+            <dd>这是商品开卖前配置，不是营销活动，也不是平台分润主页面。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>我的订单 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>采购和销售都会产生订单，需要能看状态、物流、确认收货、售后和入库。</dd>
+            <dt>使用场景</dt>
+            <dd>销售订单、进货订单、下级订单、待到货、待发货、已完成、售后。</dd>
+            <dt>边界</dt>
+            <dd>订单页不能只是演示列表，状态按钮必须有回显和状态流转。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>CPS 履约 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>有些商品不是批发进货，而是 CPS 推广，需要独立配置推广链路和履约状态。</dd>
+            <dt>使用场景</dt>
+            <dd>CPS 配置、CPS 订单演示、履约决策、状态回写。</dd>
+            <dt>边界</dt>
+            <dd>本包 CPS 偏订单履约和上架配置，不是营销推广里的任务中心。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>收益/库存页 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>商品上架和销售后，需要知道收益、库存数量、库存流水和库存详情。</dd>
+            <dt>使用场景</dt>
+            <dd>商品卡收益按钮、库存按钮、收益详情、库存详情、库存流水。</dd>
+            <dt>边界</dt>
+            <dd>不能用随机数或前端状态当真实库存，需要说明数据来源。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>手动入库/出库 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>库存需要人工调整时，必须有入库/出库原因、数量和流水记录。</dd>
+            <dt>使用场景</dt>
+            <dd>库存详情页里做手动入库、手动出库、备注、凭证、操作人和时间记录。</dd>
+            <dt>边界</dt>
+            <dd>不能只改前端 useState，需要形成库存流水。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>批量操作 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>已采购或库存商品很多时，需要批量上架、下架、补货、改价、设置 CPS。</dd>
+            <dt>使用场景</dt>
+            <dd>批量上架、批量下架、批量补货、批量 CPS 策略、批量改价。</dd>
+            <dt>边界</dt>
+            <dd>只在已采购/库存商品里生效；平台级批量规则归平台配置。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>运营标签 <span class="pill">共同能力</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>商品上架时需要带运营标签，后续运营、筛选、统计才能识别商品用途。</dd>
+            <dt>使用场景</dt>
+            <dd>单品上架配置里选择标签，批量标签管理里统一调整。</dd>
+            <dt>边界</dt>
+            <dd>平台配置_Copy 负责上架时设置标签；日常运营负责后续维护和回看。</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section id="marketing" class="package-marketing">
+      <div class="pkg-header">
+        <div class="pkg-title">
+          <h2>七、营销推广包</h2>
+          <p class="muted">场景：商品要被传播出去，代理要拿素材、做任务、发链接、看推广效果。</p>
+        </div>
+        <span class="tag purple">营销传播中心</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>端侧</th>
+              <th>本包展示重点</th>
+              <th>典型证据/页面</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PC 端</td>
+              <td>营销中心、活动配置、素材管理、推广数据、官方营销管理</td>
+              <td>MarketingCenter、MarketingPromotion、PlatformMarketingPages、MaterialsPage、ProductCenter</td>
+            </tr>
+            <tr>
+              <td>小程序端</td>
+              <td>代理侧推广、素材领取、视频号推客、邀请海报、营销活动参与</td>
+              <td>MiniMarketingCenter、MarketingPromoAgentPage、MiniAICreativeCenter、MiniVideoFactory、MiniInvitePoster、MiniMarketingActivities</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="function-list">
+        <article class="function">
+          <h3>营销推广中心 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>把素材、任务、活动、邀请海报、视频号推客和推广数据聚合在一个入口。</dd>
+            <dt>使用场景</dt>
+            <dd>代理或平台进入营销首页，选择要做推广、活动、素材还是看效果。</dd>
+            <dt>边界</dt>
+            <dd>不要放进货采购、库存入库、供应商订单。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>AI 素材/智能工具 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>推广需要文案、图片、视频、海报等素材，AI 工具负责生成和管理。</dd>
+            <dt>使用场景</dt>
+            <dd>生成素材、编辑素材、保存素材、投放到任务/活动、素材库复用。</dd>
+            <dt>边界</dt>
+            <dd>素材生成不是商品上架配置，也不是库存管理。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>推广任务 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>把推广动作变成任务，让代理知道今天该发什么、做什么、完成后有什么反馈。</dd>
+            <dt>使用场景</dt>
+            <dd>发海报、发视频、分享链接、完成转化、查看任务状态和推广结果。</dd>
+            <dt>边界</dt>
+            <dd>签到和日常活跃任务归日常运营；营销任务只保留推广动作。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>裂变活动/邀请海报 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>通过海报、邀请链路、分享链接做拉新和传播。</dd>
+            <dt>使用场景</dt>
+            <dd>生成海报、分享、访问/注册/购买、数据回传。</dd>
+            <dt>边界</dt>
+            <dd>要说明邀请对象是客户、代理还是供应商；供应商完整入驻不在这里展开。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>视频号推客 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>视频号推广需要素材、推广链接、发布记录、佣金效果。</dd>
+            <dt>使用场景</dt>
+            <dd>选素材、生成视频、绑定推广链接、发布记录、查看效果数据。</dd>
+            <dt>边界</dt>
+            <dd>这里的 CPS 是推广赚佣，不是平台配置_Copy 的订单履约。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>营销活动 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>平台或代理需要创建活动、配置规则、组织参与、查看执行效果。</dd>
+            <dt>使用场景</dt>
+            <dd>创建活动、配置规则、报名/参与、执行任务、查看效果。</dd>
+            <dt>边界</dt>
+            <dd>日常运营只跟进活动执行，不负责营销活动主创建链路。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>商品/选品中心（推广对象来源） <span class="pill">来源</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>营销推广需要选择要推广的商品，所以要能看到商品和商品详情。</dd>
+            <dt>使用场景</dt>
+            <dd>选择推广商品、查看商品信息、生成对应素材或活动。</dd>
+            <dt>边界</dt>
+            <dd>只作为营销对象来源，不展开完整商品管理、进货采购和库存。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>知识付费 <span class="pill">推广对象</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>课程、学习入口、知识商品也可能需要营销推广。</dd>
+            <dt>使用场景</dt>
+            <dd>推广课程、学习入口、知识商品活动和转化链路。</dd>
+            <dt>边界</dt>
+            <dd>不要展开成完整课程系统后台，重点是推广和学习入口。</dd>
+          </dl>
+        </article>
+      </div>
+      <div class="callout red">
+        注意：营销推广包里出现进货采购、供应商订单、日常签到等痕迹时，先按“串包或外链入口”处理，不作为本包主开发功能。
+      </div>
+    </section>
+
+    <section id="ops" class="package-ops">
+      <div class="pkg-header">
+        <div class="pkg-title">
+          <h2>八、日常运营包</h2>
+          <p class="muted">场景：运营人员每天打开系统，知道今天要做什么、看什么、跟进什么。</p>
+        </div>
+        <span class="tag orange">运营工作台</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>端侧</th>
+              <th>本包展示重点</th>
+              <th>典型证据/页面</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PC 端</td>
+              <td>运营工作台、数据分析、运营启动向导、活动执行跟进、模板选择</td>
+              <td>MainApp、PlatformOperationHub、OperationStartupWizard、DataAnalyticsHub、RealTimeDataBoard、TemplateMarket</td>
+            </tr>
+            <tr>
+              <td>小程序端</td>
+              <td>每日任务、签到、移动端运营入口、任务状态、运营展示</td>
+              <td>MiniHome、MiniTaskCenter、MiniAppRender、MiniAppShowcase、DailyCheckIn、DailyTasks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="function-list">
+        <article class="function">
+          <h3>日常运营工作台 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>运营人员需要一个首页，告诉他今天先做什么、哪些数据异常、哪些任务待完成。</dd>
+            <dt>使用场景</dt>
+            <dd>今日待办、数据预警、活动执行、标签维护、任务完成、运营启动向导。</dd>
+            <dt>边界</dt>
+            <dd>不要做成营销推广首页，也不要放采购库存主流程。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>运营标签 <span class="pill">共同能力</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>运营要根据标签看商品、人群、活动或代理状态，方便跟进和统计。</dd>
+            <dt>使用场景</dt>
+            <dd>运营视角维护标签、筛选标签、看标签统计、批量调整标签。</dd>
+            <dt>边界</dt>
+            <dd>平台配置_Copy 负责上架时设置标签；日常运营负责运营维护和回显。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>日常任务 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>把每日运营动作变成清单，让运营或代理知道做完没有、有没有奖励或反馈。</dd>
+            <dt>使用场景</dt>
+            <dd>任务名称、目标、完成按钮、完成状态、奖励/反馈、历史记录。</dd>
+            <dt>边界</dt>
+            <dd>推广动作任务归营销推广；这里负责日常活跃和运营动作。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>签到 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>签到用于记录活跃和连续运营动作，方便做激励或运营跟进。</dd>
+            <dt>使用场景</dt>
+            <dd>今日是否已签到、连续签到天数、奖励、历史记录。</dd>
+            <dt>边界</dt>
+            <dd>签到放日常运营工作台，不放营销推广中心。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>数据分析中心 <span class="pill">主责</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>运营需要看经营数据、商品数据、活动数据、任务数据，判断今天该做什么。</dd>
+            <dt>使用场景</dt>
+            <dd>经营数据、商品数据、活动数据、任务数据、时间筛选、详情下钻。</dd>
+            <dt>边界</dt>
+            <dd>没有真实数据源时不能写实时数据已接入。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>活动执行 <span class="pill">跟进</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>营销活动发起后，日常运营需要跟进执行进度、负责人、完成状态和数据反馈。</dd>
+            <dt>使用场景</dt>
+            <dd>活动执行清单、进度、负责人、完成状态、执行数据。</dd>
+            <dt>边界</dt>
+            <dd>营销推广负责创建和推广活动；日常运营负责执行跟进。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>角色/等级管理 <span class="pill">观察对象</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>运营需要知道哪些角色、代理、BOSS 等级需要跟进或培育。</dd>
+            <dt>使用场景</dt>
+            <dd>看成长状态、看谁需要跟进、看角色标签和等级表现。</dd>
+            <dt>边界</dt>
+            <dd>不要在这里配置分润系数或平台角色规则。</dd>
+          </dl>
+        </article>
+
+        <article class="function">
+          <h3>模板复制中心 <span class="pill">运营模板</span></h3>
+          <dl>
+            <dt>为什么存在</dt>
+            <dd>运营人员可以套用运营模板，快速启动类似活动、任务或运营方案。</dd>
+            <dt>使用场景</dt>
+            <dd>选择运营模板、复制模板、进入配置入口。</dd>
+            <dt>边界</dt>
+            <dd>完整系统搭建和模块组合不在这四包里展开。</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <h2>九、功能归属总表</h2>
+      <p>如果只想快速查“这个功能在哪个包”，看这一张表。</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>主责包</th>
+              <th>存在目的</th>
+              <th>其他包出现时怎么处理</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>平台规则 / 系统设置</td><td>平台配置</td><td>统一平台配置入口和规则</td><td>其他包只做入口，不展开规则中心</td></tr>
+            <tr><td>代理商侧 D1/D2 分润 / 分润模板</td><td>平台配置</td><td>配置分润模板、商品关联、生效范围</td><td>其他包引用结果，不重做分润主页面</td></tr>
+            <tr><td>商品/选品中心（平台商品池）</td><td>平台配置</td><td>商品库、选品、详情、审核入口</td><td>平台配置_Copy 里的选品入口只是进货采购第一步；营销包只作为推广对象来源</td></tr>
+            <tr><td>供应商准入 / 审核入口</td><td>平台配置</td><td>平台侧准入规则和审核入口</td><td>完整供应商履约不在本次四包展开</td></tr>
+            <tr><td>进货采购（含选品入口）</td><td>平台配置_Copy</td><td>从选货到采购单、已采购、订单</td><td>这里的选品入口服务于采购，不等同于平台商品池</td></tr>
+            <tr><td>上架配置</td><td>平台配置_Copy</td><td>商品正式开卖前配置</td><td>平台配置只定规则，营销不做上架</td></tr>
+            <tr><td>库存详情 / 手动入库出库</td><td>平台配置_Copy</td><td>库存数量、流水、人工调整</td><td>平台配置只定云仓规则</td></tr>
+            <tr><td>CPS 履约</td><td>平台配置_Copy</td><td>CPS 配置、订单履约、状态回写</td><td>营销包 CPS 是推广赚佣</td></tr>
+            <tr><td>批量上架/下架/补货</td><td>平台配置_Copy</td><td>已采购/库存商品批量处理</td><td>平台配置只做平台级批量规则</td></tr>
+            <tr><td>AI 素材 / 营销创意</td><td>营销推广</td><td>生成推广素材并复用</td><td>日常运营可使用素材，不负责生成主链路</td></tr>
+            <tr><td>推广任务</td><td>营销推广</td><td>发海报、视频、链接等推广动作</td><td>日常任务不做推广任务主链路</td></tr>
+            <tr><td>裂变活动 / 邀请海报</td><td>营销推广</td><td>拉新传播和邀请链路</td><td>日常运营只跟进执行状态</td></tr>
+            <tr><td>视频号推客</td><td>营销推广</td><td>视频素材、推广链接、效果数据</td><td>CPS 履约不在这里做</td></tr>
+            <tr><td>日常运营工作台</td><td>日常运营</td><td>每天看待办、数据、任务、执行情况</td><td>不要做成营销首页或采购工作台</td></tr>
+            <tr><td>签到 / 日常任务</td><td>日常运营</td><td>日常活跃、完成状态、奖励反馈</td><td>营销推广只保留推广任务</td></tr>
+            <tr><td>数据分析中心</td><td>日常运营</td><td>运营看板、经营/商品/活动/任务数据</td><td>结算系统不在这里重做</td></tr>
+            <tr><td>运营标签维护</td><td>日常运营 + 平台配置_Copy</td><td>上架时设置，运营时维护和统计</td><td>两个包要回显一致</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="rules">
+      <h2>十、展示判断规则</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>看到“规则、模板、分润、平台设置”</h3>
+          <p>先归到 <span class="tag blue">平台配置</span>。因为这是平台规则，不是具体每天操作。</p>
+        </div>
+        <div class="card">
+          <h3>看到“进货、上架、库存、订单、CPS履约”</h3>
+          <p>先归到 <span class="tag green">平台配置_Copy</span>。因为这是商品从采购到可卖的执行链路。</p>
+        </div>
+        <div class="card">
+          <h3>看到“素材、推广、活动、裂变、视频号”</h3>
+          <p>先归到 <span class="tag purple">营销推广</span>。因为这是对外传播和拉新转化。</p>
+        </div>
+        <div class="card">
+          <h3>看到“今日任务、签到、数据看板、运营跟进”</h3>
+          <p>先归到 <span class="tag orange">日常运营</span>。因为这是每天运营人员打开后要做的事。</p>
+        </div>
+      </div>
+      <div class="callout">
+        统一提醒：当前材料主要来自 Figma 包、MD 和组件证据，只能说明“材料里有/页面有雏形”。是否完整上线，还要继续核页面实跑、接口、保存回显、刷新保留和真实状态流转。
+      </div>
+      <p class="source">
+        依据文件：`frontend_package_inventory.md`、四包规划对比清单、四包 Figma Make 工作区规则。范围仅包括平台配置、平台配置_Copy、营销推广、日常运营四个包。
+      </p>
+    </section>
+  </main>
+</body>
+</html>

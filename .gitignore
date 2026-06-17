@@ -1,0 +1,30 @@
+# Local build and runtime
+.build/
+node_modules/
+.DS_Store
+*.inspect.ndjson
+
+# Raw/private evidence
+tmp/
+transcripts/
+logs/
+*.log
+*.wav
+*.mp3
+*.m4a
+*.mov
+*.mp4
+*.bin
+*.part*
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.env
+.env*
+*feishu*_result.json
+*feishu*_log.json
+*api*_result.json
+*token*
+*secret*
+*password*

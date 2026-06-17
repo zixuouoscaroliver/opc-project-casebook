@@ -1,0 +1,1539 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPC 证据自动化与董事长问诊点状图</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #637083;
+      --line: #d9e0e8;
+      --soft: #eef2f6;
+      --blue: #2563eb;
+      --teal: #0f9f8f;
+      --green: #23835b;
+      --amber: #b7791f;
+      --red: #c2413b;
+      --violet: #7c3aed;
+      --shadow: 0 22px 64px rgba(23, 32, 51, .10);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(37, 99, 235, .10), transparent 34%),
+        linear-gradient(180deg, #f9fafb 0%, #f3f5f8 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.2fr) minmax(280px, .8fr);
+      gap: 20px;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(217, 224, 232, .88);
+      background: rgba(255, 255, 255, .84);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 16px 42px rgba(23, 32, 51, .06);
+    }
+
+    .title h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.18;
+      font-weight: 850;
+      color: #101828;
+    }
+
+    .title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 19px;
+      line-height: 1;
+      color: #111827;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr) 330px;
+      min-height: 0;
+    }
+
+    .panel {
+      min-height: 0;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(16px);
+    }
+
+    .panel.right {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .panel-inner {
+      height: 100%;
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .section-title {
+      margin: 4px 0 10px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .search {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      outline: 0;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .search input:focus {
+      border-color: rgba(37, 99, 235, .65);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .filter-list,
+    .path-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .filter,
+    .path-button {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #344054;
+      background: #fff;
+      text-align: left;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .path-button {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .filter:hover,
+    .path-button:hover,
+    .filter.active,
+    .path-button.active {
+      transform: translateY(-1px);
+      border-color: rgba(37, 99, 235, .52);
+      box-shadow: 0 12px 30px rgba(23, 32, 51, .08);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .filter b,
+    .path-button b {
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .filter small,
+    .path-button small {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .legend-note {
+      margin: 14px 0 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: #4b5563;
+      background: rgba(255, 255, 255, .74);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .graph-shell {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      background:
+        linear-gradient(rgba(23, 32, 51, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 51, .04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .graph-toolbar {
+      position: absolute;
+      z-index: 4;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .mode-switch,
+    .zoom-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid rgba(217, 224, 232, .92);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .88);
+      box-shadow: 0 14px 36px rgba(23, 32, 51, .08);
+      backdrop-filter: blur(16px);
+      pointer-events: auto;
+    }
+
+    .mode-button,
+    .tool-button {
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: #475467;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .mode-button:hover,
+    .tool-button:hover,
+    .mode-button.active {
+      color: #111827;
+      border-color: rgba(37, 99, 235, .32);
+      background: #fff;
+    }
+
+    .tool-button {
+      width: 34px;
+      padding: 0;
+      font-size: 15px;
+    }
+
+    .tool-button.wide {
+      width: auto;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
+    .graph-badge {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      max-width: min(420px, calc(100% - 32px));
+      padding: 11px 13px;
+      border: 1px solid rgba(217, 224, 232, .92);
+      border-radius: var(--radius);
+      color: #475467;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 0 14px 38px rgba(23, 32, 51, .08);
+      backdrop-filter: blur(16px);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .detail-head {
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-head .group-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .detail-head h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 850;
+      color: #101828;
+    }
+
+    .detail-card {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .detail-card h3 {
+      margin: 0 0 8px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .detail-card p,
+    .detail-card li {
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .detail-card p {
+      margin: 0;
+    }
+
+    .detail-card ul {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .empty {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1180px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .panel,
+      .panel.right {
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-inner {
+        overflow: visible;
+      }
+
+      .filter-list,
+      .path-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .graph-toolbar {
+        position: sticky;
+        top: 8px;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .mode-switch,
+      .zoom-controls {
+        width: 100%;
+      }
+
+      .mode-button {
+        flex: 1 1 auto;
+      }
+
+      .graph-shell {
+        height: 72vh;
+        min-height: 560px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        padding: 14px;
+      }
+
+      .stats,
+      .filter-list,
+      .path-list {
+        grid-template-columns: 1fr;
+      }
+
+      .title h1 {
+        font-size: 19px;
+      }
+
+      .graph-shell {
+        height: 640px;
+        min-height: 640px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title">
+        <h1>OPC 证据自动化与董事长问诊点状图</h1>
+        <p>由两段 Mermaid 业务逻辑整理成 graphify 风格 H5：自动采集、人工入库、本地处理、董事长确认、飞书同步、材料保留与问诊输出放在同一张关系网里。</p>
+      </div>
+      <div class="stats" aria-label="图谱统计">
+        <div class="stat"><strong id="nodeCount">0</strong><span>节点</span></div>
+        <div class="stat"><strong id="edgeCount">0</strong><span>关系</span></div>
+        <div class="stat"><strong id="groupCount">0</strong><span>分组</span></div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel">
+        <div class="panel-inner">
+          <div class="search">
+            <input id="searchInput" type="search" placeholder="搜索节点，例如 董事长、Figma、飞书、冲突" />
+          </div>
+
+          <div class="section-title">按业务分组看</div>
+          <div class="filter-list" id="filters"></div>
+
+          <div class="section-title" style="margin-top:18px;">关键链路</div>
+          <div class="path-list" id="paths"></div>
+
+          <div class="legend-note">
+            这张图按“点状分布”组织：点是具体动作或资料库，线是上下游关系。颜色代表业务分组，较大的点表示跨链路关键节点。
+          </div>
+        </div>
+      </aside>
+
+      <section class="graph-shell">
+        <div class="graph-toolbar" aria-label="图谱控制">
+          <div class="mode-switch" id="modeSwitch"></div>
+          <div class="zoom-controls">
+            <button class="tool-button" id="zoomOut" type="button" aria-label="缩小">−</button>
+            <button class="tool-button" id="zoomIn" type="button" aria-label="放大">+</button>
+            <button class="tool-button wide" id="fitView" type="button">复位</button>
+            <button class="tool-button wide" id="unlockNodes" type="button">解锁</button>
+          </div>
+        </div>
+        <canvas id="graphCanvas" aria-label="OPC 业务逻辑点状关系图"></canvas>
+        <div class="graph-badge" id="graphBadge">当前是主链总览，只显示关键节点。拖动空白处移动图；拖动节点可手动摆放，拖完会固定。</div>
+      </section>
+
+      <aside class="panel right">
+        <div class="panel-inner" id="detailPanel">
+          <div class="empty">点选图上的节点后，这里会显示它的上游、下游和这一步要落到哪里。</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const groups = {
+      auto: { name: "自动采集", color: "#2563eb", x: 170, y: 145, note: "每天固定触发，负责拿 Figma 聊天和页面 OCR。" },
+      manual: { name: "人工入库", color: "#0f9f8f", x: 170, y: 390, note: "用户自己放入前端包、聊天、XMind、Excel 和会议文字。" },
+      daily: { name: "每日本地处理", color: "#23835b", x: 520, y: 305, note: "把新增材料扫描、抽取、比对、索引，生成每日小结和待处理项。" },
+      confirm: { name: "董事长 md 判断", color: "#c2413b", x: 840, y: 210, note: "冲突内容需要董事长判断能不能做，以及按哪个口径做。" },
+      feishu: { name: "飞书同步", color: "#7c3aed", x: 1055, y: 355, note: "把文件、索引、状态、确认记录和失败项同步到飞书。" },
+      retain: { name: "保留与清理", color: "#b7791f", x: 1110, y: 650, note: "按原始包、精简包、聊天记录、md、Excel/XMind 分别保留。" },
+      brief: { name: "开场小结", color: "#64748b", x: 190, y: 725, note: "董事长提问时，默认先给昨日小结和进度小结。" },
+      inquiry: { name: "问诊入口", color: "#0891b2", x: 455, y: 720, note: "判断是按包问还是按功能问，再读对应索引。" },
+      package: { name: "包诊断", color: "#16a34a", x: 660, y: 580, note: "按 Figma 包追材料、功能、页面、确认、问题和任务。" },
+      feature: { name: "功能诊断", color: "#ea580c", x: 660, y: 850, note: "按功能追相关包、md、冲突、聊天、页面事实和 XMind。" },
+      decision: { name: "董事长问诊判断", color: "#db2777", x: 990, y: 600, note: "把问题拆成进度、缺口、能不能做、本期要不要做。" },
+      output: { name: "输出建议", color: "#4f46e5", x: 1195, y: 850, note: "信息够时输出下一步建议；不够时继续追问。" }
+    };
+
+    const nodes = [
+      node("run_daily_opc_sync", "run_daily_opc_sync", "auto", "每天 12:15 的自动任务入口。", 17, true),
+      node("collect_figma_chat", "扒取 Figma 聊天记录", "auto", "调用现成工具把 Figma 聊天记录拉到本地。", 13),
+      node("capture_ocr", "页面截图与 OCR", "auto", "对页面做截图和文字识别，补页面事实来源。", 13),
+      node("figma_chat_store", "01_Figma 聊天记录 / 自动扒取", "auto", "自动采集到的 Figma 聊天记录存放位置。", 13),
+      node("ocr_store", "04_页面截图与 OCR", "auto", "页面截图和 OCR 结果存放位置。", 13),
+
+      node("frontend_package", "Figma 前端包", "manual", "用户人工放入的 Figma Make 前端包。", 12),
+      node("wechat_export", "微信聊天导出包", "manual", "人工导出的微信聊天材料。", 12),
+      node("xmind_map", "XMind 导图", "manual", "功能结构或总图来源。", 12),
+      node("excel_status", "Excel 状态表", "manual", "版本、确认、任务等结构化状态来源。", 12),
+      node("meeting_text", "会议转文字", "manual", "会议纪要或录音转写后的文字材料。", 12),
+
+      node("scan_evidence", "扫描新增材料", "daily", "每日处理的起点，汇总自动采集和人工入库材料。", 18, true),
+      node("evidence_manifest", "更新 evidence_manifest", "daily", "记录材料来源、路径、时间和后续可追溯信息。", 13),
+      node("process_frontend", "处理新增前端包", "daily", "识别新增前端包并进入后续抽取。", 13),
+      node("compact_package", "生成精简包", "daily", "从完整包生成后续分析更好用的精简包。", 13),
+      node("extract_md", "抽取 md", "daily", "从前端包或材料中抽取 md 原文。", 13),
+      node("compare_md", "md 新旧版本比对", "daily", "判断同一份 md 是否和旧版本出现口径差异。", 13),
+      node("has_conflict", "是否有冲突", "daily", "把 md 比对结果分成有冲突和无冲突。", 15, true),
+      node("md_conflict_pool", "写入 md 冲突池", "daily", "有冲突的内容进入冲突池，等待确认。", 14, true),
+      node("current_reference", "进入当前参考口径", "daily", "无冲突的内容进入当前可参考口径。", 13),
+      node("pkg_func_index", "更新包-功能索引", "daily", "从材料登记更新包到功能的查找路径。", 13),
+      node("func_pkg_index", "更新功能-包索引", "daily", "从功能点更新到相关包的查找路径。", 13),
+      node("daily_summary", "生成 daily_summary", "daily", "每日把新增、冲突、索引和待办汇总成小结。", 15, true),
+      node("failed_todo", "更新失败项 / 待处理项", "daily", "记录没有跑通、下次要补跑、还要人工处理的事项。", 13),
+
+      node("md_conflict_entry", "md 冲突池", "confirm", "董事长判断的入口材料。", 14),
+      node("chairman_decision_md", "判断能不能做 / 按哪个口径", "confirm", "由董事长确认能不能做，以及采用哪个 md 口径。", 17, true),
+      node("confirmed_md", "生成确认版 md", "confirm", "按原 md 格式生成确认版，保留可追溯文本。", 14),
+      node("chairman_log", "写入董事长确认记录", "confirm", "把董事长确认结果写入记录，并回流到每日小结。", 15, true),
+
+      node("sync_feishu", "同步飞书", "feishu", "飞书同步总入口。", 16, true),
+      node("feishu_drive", "飞书云空间存文件", "feishu", "存放原始文件、精简包、确认版材料等。", 13),
+      node("feishu_base", "飞书多维表格存索引 / 状态 / 链接 / 董事长确认", "feishu", "承接索引、状态、链接、确认记录，供团队查询。", 13),
+      node("sync_log", "同步日志", "feishu", "记录每次同步是否成功。", 12),
+      node("retry_failed", "失败项下次补跑", "feishu", "同步失败或处理失败的事项进入下一次补跑。", 12),
+
+      node("retain_raw", "原始完整包保留", "retain", "本地保留 7-14 天，飞书保留最近 3 份。", 12),
+      node("retain_compact", "精简包保留", "retain", "每日 14 天、每周 8 周、每月 6-12 个月。", 12),
+      node("retain_figma_chat", "Figma 聊天长期保留", "retain", "Figma 聊天记录长期留存。", 12),
+      node("retain_md", "md 原文和确认版长期保留", "retain", "md 原文与董事长确认版都长期留存。", 12),
+      node("retain_current", "Excel / XMind / manifest 长期保留", "retain", "当前版本状态表、导图和 manifest 长期留存。", 12),
+
+      node("chairman_question", "董事长提问", "brief", "问诊流程的起点。", 17, true),
+      node("skip_summary", "是否明确跳过小结", "brief", "判断本轮是否直接进入问诊。", 14),
+      node("opening_summary", "开场小结", "brief", "默认先读基础材料并输出昨日小结和进度。", 13),
+      node("read_daily_summary", "读 daily_summary.md", "brief", "读取每日小结。", 11),
+      node("read_version_excel", "读 Excel：08_版本跟踪", "brief", "读取版本跟踪表。", 11),
+      node("read_chairman_excel", "读 Excel：05_董事长确认", "brief", "读取董事长确认表。", 11),
+      node("read_md_pool", "读 md 冲突池", "brief", "读取 md 冲突池。", 11),
+      node("summary_output", "输出昨日小结 + 进度小结", "brief", "给董事长一个开场进度判断。", 13),
+
+      node("enter_inquiry", "进入问诊", "inquiry", "开始判断本轮问题要按包还是按功能查。", 17, true),
+      node("judge_object", "判断按包问还是按功能问", "inquiry", "根据提问对象选择诊断路径。", 14),
+      node("read_pkg_func_index", "读 package_function_index", "inquiry", "包到功能的索引。", 12),
+      node("read_func_pkg_index", "读 function_package_index", "inquiry", "功能到包的索引。", 12),
+      node("object_type", "对象类型", "inquiry", "分流到包诊断或功能诊断。", 14, true),
+
+      node("package_diagnosis", "包诊断", "package", "按 Figma 包完整追溯材料与事实。", 15, true),
+      node("pkg_read_index", "读包-功能索引", "package", "先找这个包涉及哪些功能。", 11),
+      node("pkg_read_register", "读 01_材料登记", "package", "查看这包从哪来、材料是否齐。", 11),
+      node("pkg_read_breakdown", "读 02_功能拆解", "package", "查看 Figma 总结怎么拆功能。", 11),
+      node("pkg_read_md", "读 md 库", "package", "读取相关 md 原文。", 11),
+      node("pkg_read_conflict", "读 md 冲突池", "package", "看这包有没有口径冲突。", 11),
+      node("pkg_read_page_check", "读 03_页面核对", "package", "看页面实际核对情况。", 11),
+      node("pkg_read_page_fact", "读页面事实库", "package", "看截图、OCR、页面运行事实。", 11),
+      node("pkg_read_confirm", "读 05_董事长确认", "package", "看董事长是否确认过。", 11),
+      node("pkg_read_issues", "读 06_问题清单", "package", "看目前缺什么、卡在哪里。", 11),
+      node("pkg_read_tasks", "读 07_开发任务，仅作参考", "package", "开发任务只作参考，不替代判断。", 11),
+      node("package_result", "包诊断结果", "package", "形成按包的诊断结论。", 14, true),
+
+      node("feature_diagnosis", "功能诊断", "feature", "按功能完整追溯相关包和事实。", 15, true),
+      node("func_read_index", "读功能-包索引", "feature", "先找这个功能涉及哪些包。", 11),
+      node("func_read_breakdown", "读 02_功能拆解", "feature", "看功能在 Figma 总结里怎么说。", 11),
+      node("func_read_md", "读 md 库", "feature", "读取相关 md 原文。", 11),
+      node("func_read_conflict", "读 md 冲突池", "feature", "看功能口径是否冲突。", 11),
+      node("func_read_figma_chat", "读 Figma 聊天库", "feature", "找聊天里对功能的原话和解释。", 11),
+      node("func_read_page_check", "读 03_页面核对", "feature", "看功能对应页面跑没跑。", 11),
+      node("func_read_page_fact", "读页面事实库", "feature", "看页面截图、OCR、运行事实。", 11),
+      node("func_read_confirm", "读 05_董事长确认", "feature", "看董事长是否已确认。", 11),
+      node("func_read_tasks", "读 07_开发任务，仅作参考", "feature", "开发任务只作参考，不直接派活。", 11),
+      node("func_read_xmind", "必要时读 XMind / 总图库", "feature", "必要时用总图补结构关系。", 11),
+      node("feature_result", "功能诊断结果", "feature", "形成按功能的诊断结论。", 14, true),
+
+      node("chairman_need", "董事长要解决什么", "decision", "判断董事长这次到底问进度、缺口、能不能做还是本期。", 17, true),
+      node("progress_check", "进度判断", "decision", "回答做到哪了。", 13),
+      node("progress_sources", "读 02 + md 库 + 03 + 页面事实 + 05", "decision", "进度判断要读的材料组合。", 11),
+      node("progress_output", "已确定 / 未核对 / 不能下结论 / 下一步", "decision", "进度判断的输出格式。", 12),
+      node("gap_check", "缺口判断", "decision", "回答下一步调什么。", 13),
+      node("gap_sources", "读 06 + 03 + 页面事实 + md 冲突池 + Figma 聊天 + XMind", "decision", "缺口判断要读的材料组合。", 11),
+      node("gap_output", "先补什么 / 为什么 / 不建议什么 / 推进到哪", "decision", "缺口判断的输出格式。", 12),
+      node("can_do_check", "董事长判断能不能做", "decision", "需要董事长确认可做、不可做、后置或待核对。", 14, true),
+      node("can_do_sources", "读 05 + 06 + 确认版 md + 冲突池 + 页面事实 + 聊天 + XMind", "decision", "能不能做判断要读的材料组合。", 11),
+      node("ask_chairman", "问董事长：能不能做 / 哪些后置 / 哪些待核对", "decision", "把判断权交回董事长。", 13),
+      node("sync_decision_log", "同步飞书表格和 chairman_decision_log", "decision", "确认后写入表格和判断记录。", 13),
+      node("no_assignment", "不判断怎么派活，由 Oscar 后续看表决定", "decision", "这里只记录判断，不替 Oscar 派活。", 12),
+      node("period_check", "本期判断", "decision", "回答要不要本期做。", 13),
+      node("period_sources", "读 05 + 06 + 08 + XMind + 确认版 md + 董事长确认记录", "decision", "本期判断要读的材料组合。", 11),
+      node("period_output", "进本期 / 后置 / 先核对", "decision", "本期判断的输出格式。", 12),
+      node("period_sync", "确认后同步飞书表格", "decision", "本期判断确认后写回飞书。", 12),
+
+      node("enough_info", "信息够不够", "output", "决定继续追问还是输出建议。", 16, true),
+      node("continue_ask", "继续主动追问", "output", "信息不够时回到问诊入口继续问。", 13),
+      node("suggestion", "输出建议", "output", "信息够时给出下一步建议。", 15, true),
+      node("suggest_figma", "继续调 Figma", "output", "建议继续调 Figma。", 11),
+      node("suggest_oscar", "先让 Oscar 核对", "output", "建议先由 Oscar 核对。", 11),
+      node("suggest_confirm", "请董事长确认口径", "output", "建议请董事长确认口径。", 11),
+      node("suggest_write", "写入能不能做的判断", "output", "建议把判断写入记录。", 11),
+      node("suggest_pause", "后置 / 暂停", "output", "建议后置或暂停。", 11)
+    ];
+
+    const links = [
+      edge("run_daily_opc_sync", "collect_figma_chat", "触发"),
+      edge("run_daily_opc_sync", "capture_ocr", "触发"),
+      edge("collect_figma_chat", "figma_chat_store", "写入"),
+      edge("capture_ocr", "ocr_store", "写入"),
+      edge("figma_chat_store", "scan_evidence", "进入每日处理"),
+      edge("ocr_store", "scan_evidence", "进入每日处理"),
+      edge("frontend_package", "scan_evidence", "人工入库"),
+      edge("wechat_export", "scan_evidence", "人工入库"),
+      edge("xmind_map", "scan_evidence", "人工入库"),
+      edge("excel_status", "scan_evidence", "人工入库"),
+      edge("meeting_text", "scan_evidence", "人工入库"),
+      edge("scan_evidence", "evidence_manifest", "登记"),
+      edge("scan_evidence", "process_frontend", "识别"),
+      edge("process_frontend", "compact_package", "生成"),
+      edge("compact_package", "extract_md", "抽取"),
+      edge("extract_md", "compare_md", "比对"),
+      edge("compare_md", "has_conflict", "判断"),
+      edge("has_conflict", "md_conflict_pool", "有冲突"),
+      edge("has_conflict", "current_reference", "无冲突"),
+      edge("evidence_manifest", "pkg_func_index", "更新"),
+      edge("evidence_manifest", "func_pkg_index", "更新"),
+      edge("md_conflict_pool", "daily_summary", "汇总"),
+      edge("current_reference", "daily_summary", "汇总"),
+      edge("pkg_func_index", "daily_summary", "汇总"),
+      edge("func_pkg_index", "daily_summary", "汇总"),
+      edge("daily_summary", "failed_todo", "输出"),
+      edge("md_conflict_pool", "md_conflict_entry", "进入判断"),
+      edge("md_conflict_entry", "chairman_decision_md", "请确认"),
+      edge("chairman_decision_md", "confirmed_md", "生成"),
+      edge("confirmed_md", "chairman_log", "落档"),
+      edge("chairman_log", "daily_summary", "回流"),
+      edge("failed_todo", "sync_feishu", "同步"),
+      edge("chairman_log", "sync_feishu", "同步"),
+      edge("sync_feishu", "feishu_drive", "存文件"),
+      edge("sync_feishu", "feishu_base", "存状态"),
+      edge("sync_feishu", "sync_log", "记日志"),
+      edge("sync_feishu", "retry_failed", "失败补跑"),
+      edge("frontend_package", "retain_raw", "保留"),
+      edge("compact_package", "retain_compact", "保留"),
+      edge("figma_chat_store", "retain_figma_chat", "保留"),
+      edge("extract_md", "retain_md", "保留"),
+      edge("confirmed_md", "retain_md", "保留"),
+      edge("xmind_map", "retain_current", "保留"),
+      edge("excel_status", "retain_current", "保留"),
+      edge("evidence_manifest", "retain_current", "保留"),
+
+      edge("chairman_question", "skip_summary", "判断"),
+      edge("skip_summary", "opening_summary", "否"),
+      edge("skip_summary", "enter_inquiry", "是"),
+      edge("opening_summary", "read_daily_summary", "读取"),
+      edge("opening_summary", "read_version_excel", "读取"),
+      edge("opening_summary", "read_chairman_excel", "读取"),
+      edge("opening_summary", "read_md_pool", "读取"),
+      edge("read_daily_summary", "summary_output", "汇总"),
+      edge("read_version_excel", "summary_output", "汇总"),
+      edge("read_chairman_excel", "summary_output", "汇总"),
+      edge("read_md_pool", "summary_output", "汇总"),
+      edge("summary_output", "enter_inquiry", "继续"),
+      edge("enter_inquiry", "judge_object", "判断"),
+      edge("judge_object", "read_pkg_func_index", "读取"),
+      edge("judge_object", "read_func_pkg_index", "读取"),
+      edge("read_pkg_func_index", "object_type", "判断"),
+      edge("read_func_pkg_index", "object_type", "判断"),
+      edge("object_type", "package_diagnosis", "按 Figma 包"),
+      edge("object_type", "feature_diagnosis", "按功能"),
+
+      edge("package_diagnosis", "pkg_read_index", "读取"),
+      edge("pkg_read_index", "pkg_read_register", "读取"),
+      edge("pkg_read_register", "pkg_read_breakdown", "读取"),
+      edge("pkg_read_breakdown", "pkg_read_md", "读取"),
+      edge("pkg_read_md", "pkg_read_conflict", "读取"),
+      edge("pkg_read_conflict", "pkg_read_page_check", "读取"),
+      edge("pkg_read_page_check", "pkg_read_page_fact", "读取"),
+      edge("pkg_read_page_fact", "pkg_read_confirm", "读取"),
+      edge("pkg_read_confirm", "pkg_read_issues", "读取"),
+      edge("pkg_read_issues", "pkg_read_tasks", "参考"),
+      edge("pkg_read_tasks", "package_result", "输出"),
+
+      edge("feature_diagnosis", "func_read_index", "读取"),
+      edge("func_read_index", "func_read_breakdown", "读取"),
+      edge("func_read_breakdown", "func_read_md", "读取"),
+      edge("func_read_md", "func_read_conflict", "读取"),
+      edge("func_read_conflict", "func_read_figma_chat", "读取"),
+      edge("func_read_figma_chat", "func_read_page_check", "读取"),
+      edge("func_read_page_check", "func_read_page_fact", "读取"),
+      edge("func_read_page_fact", "func_read_confirm", "读取"),
+      edge("func_read_confirm", "func_read_tasks", "参考"),
+      edge("func_read_tasks", "func_read_xmind", "必要时"),
+      edge("func_read_xmind", "feature_result", "输出"),
+
+      edge("package_result", "chairman_need", "进入判断"),
+      edge("feature_result", "chairman_need", "进入判断"),
+      edge("chairman_need", "progress_check", "做到哪了"),
+      edge("progress_check", "progress_sources", "读取"),
+      edge("progress_sources", "progress_output", "输出"),
+      edge("chairman_need", "gap_check", "下一步调什么"),
+      edge("gap_check", "gap_sources", "读取"),
+      edge("gap_sources", "gap_output", "输出"),
+      edge("chairman_need", "can_do_check", "能不能做"),
+      edge("can_do_check", "can_do_sources", "读取"),
+      edge("can_do_sources", "ask_chairman", "提问"),
+      edge("ask_chairman", "sync_decision_log", "同步"),
+      edge("sync_decision_log", "no_assignment", "边界"),
+      edge("chairman_need", "period_check", "要不要本期做"),
+      edge("period_check", "period_sources", "读取"),
+      edge("period_sources", "period_output", "组织判断"),
+      edge("period_output", "period_sync", "同步"),
+      edge("progress_output", "enough_info", "判断"),
+      edge("gap_output", "enough_info", "判断"),
+      edge("no_assignment", "enough_info", "判断"),
+      edge("period_sync", "enough_info", "判断"),
+      edge("enough_info", "continue_ask", "不够"),
+      edge("continue_ask", "enter_inquiry", "回到问诊"),
+      edge("enough_info", "suggestion", "够"),
+      edge("suggestion", "suggest_figma", "建议"),
+      edge("suggestion", "suggest_oscar", "建议"),
+      edge("suggestion", "suggest_confirm", "建议"),
+      edge("suggestion", "suggest_write", "建议"),
+      edge("suggestion", "suggest_pause", "建议"),
+
+      edge("daily_summary", "read_daily_summary", "问诊引用", true),
+      edge("chairman_log", "read_chairman_excel", "问诊引用", true),
+      edge("md_conflict_pool", "read_md_pool", "问诊引用", true),
+      edge("pkg_func_index", "read_pkg_func_index", "索引引用", true),
+      edge("func_pkg_index", "read_func_pkg_index", "索引引用", true),
+      edge("figma_chat_store", "func_read_figma_chat", "聊天引用", true),
+      edge("ocr_store", "func_read_page_fact", "页面事实", true),
+      edge("ocr_store", "pkg_read_page_fact", "页面事实", true),
+      edge("feishu_base", "read_chairman_excel", "状态引用", true)
+    ];
+
+    const paths = {
+      daily: {
+        name: "每日证据闭环",
+        hint: "材料进入、抽 md、比对、生成小结、同步飞书",
+        nodes: ["scan_evidence", "process_frontend", "compact_package", "extract_md", "compare_md", "has_conflict", "md_conflict_pool", "daily_summary", "failed_todo", "sync_feishu"]
+      },
+      chairman: {
+        name: "董事长问诊闭环",
+        hint: "提问、小结、按包/功能诊断、判断、输出建议",
+        nodes: ["chairman_question", "skip_summary", "summary_output", "enter_inquiry", "object_type", "package_result", "feature_result", "chairman_need", "enough_info", "suggestion"]
+      },
+      confirm: {
+        name: "冲突确认闭环",
+        hint: "md 冲突池、董事长确认、确认版 md、确认记录、回流小结",
+        nodes: ["md_conflict_pool", "md_conflict_entry", "chairman_decision_md", "confirmed_md", "chairman_log", "daily_summary", "sync_feishu"]
+      }
+    };
+
+    const modes = {
+      overview: {
+        name: "主链总览",
+        hint: "只看能把两套流程串起来的关键节点，先把主干看清楚。",
+        nodes: [
+          "run_daily_opc_sync", "collect_figma_chat", "capture_ocr", "figma_chat_store", "ocr_store",
+          "frontend_package", "xmind_map", "excel_status",
+          "scan_evidence", "process_frontend", "compact_package", "extract_md", "compare_md",
+          "has_conflict", "md_conflict_pool", "current_reference", "daily_summary", "failed_todo",
+          "chairman_decision_md", "confirmed_md", "chairman_log", "sync_feishu", "feishu_base",
+          "chairman_question", "skip_summary", "summary_output", "enter_inquiry", "judge_object",
+          "object_type", "package_diagnosis", "feature_diagnosis", "package_result", "feature_result",
+          "chairman_need", "can_do_check", "enough_info", "continue_ask", "suggestion"
+        ]
+      },
+      evidence: {
+        name: "证据流",
+        hint: "只看材料从采集、入库、处理、确认到飞书同步的链路。",
+        nodes: [
+          "run_daily_opc_sync", "collect_figma_chat", "capture_ocr", "figma_chat_store", "ocr_store",
+          "frontend_package", "wechat_export", "xmind_map", "excel_status", "meeting_text",
+          "scan_evidence", "evidence_manifest", "process_frontend", "compact_package", "extract_md",
+          "compare_md", "has_conflict", "md_conflict_pool", "current_reference", "pkg_func_index",
+          "func_pkg_index", "daily_summary", "failed_todo", "md_conflict_entry", "chairman_decision_md",
+          "confirmed_md", "chairman_log", "sync_feishu", "feishu_drive", "feishu_base", "sync_log",
+          "retry_failed"
+        ]
+      },
+      inquiry: {
+        name: "问诊流",
+        hint: "只看董事长提问后，怎么读材料、怎么判断、怎么输出建议。",
+        nodes: [
+          "chairman_question", "skip_summary", "opening_summary", "read_daily_summary", "read_version_excel",
+          "read_chairman_excel", "read_md_pool", "summary_output", "enter_inquiry", "judge_object",
+          "read_pkg_func_index", "read_func_pkg_index", "object_type", "package_diagnosis",
+          "feature_diagnosis", "package_result", "feature_result", "chairman_need", "progress_check",
+          "progress_output", "gap_check", "gap_output", "can_do_check", "ask_chairman",
+          "sync_decision_log", "no_assignment", "period_check", "period_output", "period_sync",
+          "enough_info", "continue_ask", "suggestion", "suggest_figma", "suggest_oscar",
+          "suggest_confirm", "suggest_write", "suggest_pause"
+        ]
+      },
+      all: {
+        name: "全部",
+        hint: "显示全量 98 个节点。这个视图适合搜索和局部查看，不适合一眼读全图。",
+        nodes: null
+      }
+    };
+
+    function node(id, label, group, summary, size = 12, core = false) {
+      return { id, label, group, summary, size, core, x: 0, y: 0, vx: 0, vy: 0, pinned: false };
+    }
+
+    function edge(source, target, label, bridge = false) {
+      return { source, target, label, bridge };
+    }
+
+    const nodeById = new Map(nodes.map((n) => [n.id, n]));
+    const linked = new Map(nodes.map((n) => [n.id, { in: [], out: [] }]));
+    for (const link of links) {
+      linked.get(link.source).out.push(link);
+      linked.get(link.target).in.push(link);
+    }
+
+    const canvas = document.getElementById("graphCanvas");
+    const ctx = canvas.getContext("2d");
+    const filtersEl = document.getElementById("filters");
+    const pathsEl = document.getElementById("paths");
+    const modeSwitchEl = document.getElementById("modeSwitch");
+    const detailPanel = document.getElementById("detailPanel");
+    const searchInput = document.getElementById("searchInput");
+    const graphBadge = document.getElementById("graphBadge");
+    const zoomInButton = document.getElementById("zoomIn");
+    const zoomOutButton = document.getElementById("zoomOut");
+    const fitViewButton = document.getElementById("fitView");
+    const unlockNodesButton = document.getElementById("unlockNodes");
+
+    const world = { width: 1360, height: 980 };
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let activeMode = "overview";
+    let activeGroup = "all";
+    let activePath = null;
+    let searchTerm = "";
+    let selectedId = "scan_evidence";
+    let hoveredId = null;
+    let dragNode = null;
+    let isPanning = false;
+    let lastPointer = null;
+    let dragOrigin = null;
+    let settledTicks = 0;
+
+    function setup() {
+      document.getElementById("nodeCount").textContent = nodes.length;
+      document.getElementById("edgeCount").textContent = links.length;
+      document.getElementById("groupCount").textContent = Object.keys(groups).length;
+      buildModes();
+      buildFilters();
+      buildPaths();
+      wireToolbar();
+      seedLayout();
+      resize();
+      selectNode(selectedId);
+      requestAnimationFrame(loop);
+    }
+
+    function buildModes() {
+      for (const [key, mode] of Object.entries(modes)) {
+        const btn = document.createElement("button");
+        btn.className = `mode-button${key === activeMode ? " active" : ""}`;
+        btn.dataset.mode = key;
+        btn.type = "button";
+        btn.textContent = mode.name;
+        modeSwitchEl.appendChild(btn);
+      }
+
+      modeSwitchEl.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        setMode(btn.dataset.mode);
+      });
+    }
+
+    function buildFilters() {
+      const all = document.createElement("button");
+      all.className = "filter active";
+      all.dataset.group = "all";
+      all.innerHTML = `<span class="dot" style="background:#111827"></span><b>全部节点</b><small>${nodes.length}</small>`;
+      filtersEl.appendChild(all);
+
+      for (const [key, group] of Object.entries(groups)) {
+        const count = nodes.filter((n) => n.group === key).length;
+        const btn = document.createElement("button");
+        btn.className = "filter";
+        btn.dataset.group = key;
+        btn.innerHTML = `<span class="dot" style="background:${group.color}"></span><b>${escapeHTML(group.name)}</b><small>${count}</small>`;
+        filtersEl.appendChild(btn);
+      }
+
+      filtersEl.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        activeMode = "all";
+        activeGroup = btn.dataset.group;
+        activePath = null;
+        updateControlState();
+        selectFirstVisibleNode();
+        fitView();
+        updateBadge();
+      });
+    }
+
+    function buildPaths() {
+      for (const [key, path] of Object.entries(paths)) {
+        const btn = document.createElement("button");
+        btn.className = "path-button";
+        btn.dataset.path = key;
+        btn.innerHTML = `<b>${escapeHTML(path.name)}</b><small>${path.nodes.length} 点</small>`;
+        pathsEl.appendChild(btn);
+      }
+
+      pathsEl.addEventListener("click", (event) => {
+        const btn = event.target.closest("button");
+        if (!btn) return;
+        const key = btn.dataset.path;
+        activePath = activePath === key ? null : key;
+        activeMode = activePath ? "all" : "overview";
+        activeGroup = "all";
+        updateControlState();
+        selectFirstVisibleNode();
+        fitView();
+        updateBadge();
+      });
+    }
+
+    function wireToolbar() {
+      zoomInButton.addEventListener("click", () => zoomAtCenter(1.16));
+      zoomOutButton.addEventListener("click", () => zoomAtCenter(.86));
+      fitViewButton.addEventListener("click", () => fitView());
+      unlockNodesButton.addEventListener("click", () => {
+        nodes.forEach((n) => {
+          n.pinned = false;
+        });
+        graphBadge.textContent = "已解锁手动拖过的节点，布局会重新靠回分组中心。";
+      });
+    }
+
+    function setMode(modeKey) {
+      activeMode = modeKey;
+      activeGroup = "all";
+      activePath = null;
+      searchTerm = "";
+      searchInput.value = "";
+      updateControlState();
+      selectFirstVisibleNode();
+      fitView();
+      updateBadge();
+    }
+
+    function updateControlState() {
+      document.querySelectorAll(".mode-button").forEach((item) => item.classList.toggle("active", item.dataset.mode === activeMode));
+      document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item.dataset.group === activeGroup));
+      document.querySelectorAll(".path-button").forEach((item) => item.classList.toggle("active", activePath === item.dataset.path));
+    }
+
+    function updateBadge() {
+      if (activePath) {
+        graphBadge.textContent = `${paths[activePath].name}：${paths[activePath].hint}。拖动空白处移动图，拖动节点可手动摆放。`;
+        return;
+      }
+      if (activeGroup !== "all") {
+        graphBadge.textContent = `${groups[activeGroup].name}：${groups[activeGroup].note}。当前只看这个分组。`;
+        return;
+      }
+      graphBadge.textContent = `${modes[activeMode].name}：${modes[activeMode].hint}。拖动空白处移动图；拖动节点可手动摆放，拖完会固定。`;
+    }
+
+    function selectFirstVisibleNode() {
+      const visible = getVisibleNodeSet();
+      const next = nodes.find((n) => visible.has(n.id)) || nodes[0];
+      if (next) selectNode(next.id);
+    }
+
+    function seedLayout() {
+      const byGroup = {};
+      for (const node of nodes) {
+        if (!byGroup[node.group]) byGroup[node.group] = [];
+        byGroup[node.group].push(node);
+      }
+      for (const [groupKey, groupNodes] of Object.entries(byGroup)) {
+        const group = groups[groupKey];
+        groupNodes.forEach((node, index) => {
+          const angle = index * 2.399963 + group.x * .003;
+          const radius = 32 + Math.sqrt(index) * 24;
+          node.x = group.x + Math.cos(angle) * radius;
+          node.y = group.y + Math.sin(angle) * radius;
+        });
+      }
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      width = Math.max(320, rect.width);
+      height = Math.max(420, rect.height);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * pixelRatio);
+      canvas.height = Math.floor(height * pixelRatio);
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      fitView();
+    }
+
+    function fitView() {
+      const bounds = visibleBounds();
+      const padding = width < 680 ? 46 : 92;
+      const availableW = Math.max(320, width - padding);
+      const availableH = Math.max(420, height - padding);
+      const boundsW = Math.max(260, bounds.maxX - bounds.minX);
+      const boundsH = Math.max(260, bounds.maxY - bounds.minY);
+      scale = clamp(Math.min(availableW / boundsW, availableH / boundsH), .46, 1.28);
+      offsetX = (width - (bounds.minX + bounds.maxX) * scale) / 2;
+      offsetY = (height - (bounds.minY + bounds.maxY) * scale) / 2;
+    }
+
+    function visibleBounds() {
+      const visible = getVisibleNodeSet();
+      const shown = nodes.filter((n) => visible.has(n.id));
+      if (!shown.length) return { minX: 0, minY: 0, maxX: world.width, maxY: world.height };
+      return shown.reduce((acc, n) => ({
+        minX: Math.min(acc.minX, n.x - 90),
+        minY: Math.min(acc.minY, n.y - 90),
+        maxX: Math.max(acc.maxX, n.x + 90),
+        maxY: Math.max(acc.maxY, n.y + 90)
+      }), { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity });
+    }
+
+    function zoomAtCenter(delta) {
+      const point = { x: width / 2, y: height / 2 };
+      const before = screenToWorld(point);
+      scale = clamp(scale * delta, .36, 2.2);
+      offsetX = point.x - before.x * scale;
+      offsetY = point.y - before.y * scale;
+    }
+
+    function getVisibleNodeSet() {
+      if (activePath) return new Set(paths[activePath].nodes);
+      if (searchTerm) {
+        const matched = new Set(nodes
+          .filter((n) => n.label.toLowerCase().includes(searchTerm) || groups[n.group].name.toLowerCase().includes(searchTerm))
+          .map((n) => n.id));
+        for (const id of [...matched]) {
+          const refs = linked.get(id);
+          refs.in.forEach((link) => matched.add(link.source));
+          refs.out.forEach((link) => matched.add(link.target));
+        }
+        return matched.size ? matched : new Set();
+      }
+      if (activeGroup !== "all") {
+        return new Set(nodes.filter((n) => n.group === activeGroup).map((n) => n.id));
+      }
+      if (activeMode !== "all" && modes[activeMode].nodes) {
+        return new Set(modes[activeMode].nodes);
+      }
+      return new Set(nodes.map((n) => n.id));
+    }
+
+    function loop() {
+      tick();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    function tick() {
+      const activePathSet = activePath ? new Set(paths[activePath].nodes) : null;
+      const visible = getVisibleNodeSet();
+      for (const n of nodes) {
+        if (!visible.has(n.id) || n.pinned) continue;
+        const group = groups[n.group];
+        const attraction = n.core ? 0.018 : 0.012;
+        n.vx += (group.x - n.x) * attraction;
+        n.vy += (group.y - n.y) * attraction;
+      }
+
+      for (const link of links) {
+        if (!visible.has(link.source) || !visible.has(link.target)) continue;
+        const a = nodeById.get(link.source);
+        const b = nodeById.get(link.target);
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.max(1, Math.hypot(dx, dy));
+        const desired = link.bridge ? 160 : 105;
+        const force = (dist - desired) * (link.bridge ? 0.0022 : 0.0038);
+        const fx = dx / dist * force;
+        const fy = dy / dist * force;
+        if (!a.pinned) {
+          a.vx += fx;
+          a.vy += fy;
+        }
+        if (!b.pinned) {
+          b.vx -= fx;
+          b.vy -= fy;
+        }
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        if (!visible.has(a.id)) continue;
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          if (!visible.has(b.id)) continue;
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist2 = dx * dx + dy * dy + .01;
+          if (dist2 > 38000) continue;
+          const force = (a.group === b.group ? 58 : 95) / dist2;
+          if (!a.pinned) {
+            a.vx -= dx * force;
+            a.vy -= dy * force;
+          }
+          if (!b.pinned) {
+            b.vx += dx * force;
+            b.vy += dy * force;
+          }
+        }
+      }
+
+      for (const n of nodes) {
+        if (!visible.has(n.id) || dragNode === n || n.pinned) continue;
+        const visibleBoost = activePathSet && activePathSet.has(n.id) ? 1.02 : 1;
+        n.vx *= 0.82;
+        n.vy *= 0.82;
+        n.x = clamp(n.x + n.vx * visibleBoost, 26, world.width - 26);
+        n.y = clamp(n.y + n.vy * visibleBoost, 26, world.height - 26);
+      }
+
+      settledTicks++;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+
+      drawGroupRegions();
+      drawLinks();
+      drawNodes();
+
+      ctx.restore();
+    }
+
+    function drawGroupRegions() {
+      const visible = getVisibleNodeSet();
+      for (const [key, group] of Object.entries(groups)) {
+        const hasVisibleNodes = nodes.some((n) => n.group === key && visible.has(n.id));
+        if (!hasVisibleNodes) continue;
+        const active = activeGroup === "all" || activeGroup === key || activeMode !== "all" || activePath;
+        ctx.save();
+        ctx.globalAlpha = active ? .075 : .028;
+        ctx.fillStyle = group.color;
+        ctx.beginPath();
+        ctx.arc(group.x, group.y, key === "daily" || key === "decision" ? 178 : 138, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = active ? .92 : .38;
+        ctx.fillStyle = "#334155";
+        ctx.font = "700 18px -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif";
+        ctx.fillText(group.name, group.x - 48, group.y - (key === "feature" ? 136 : 120));
+        ctx.restore();
+      }
+    }
+
+    function drawLinks() {
+      for (const link of links) {
+        const a = nodeById.get(link.source);
+        const b = nodeById.get(link.target);
+        const visibility = edgeVisibility(link);
+        if (visibility <= .04) continue;
+        drawArrow(a, b, visibility, isPathEdge(link));
+      }
+    }
+
+    function drawArrow(a, b, alpha, highlighted) {
+      const color = highlighted ? "#111827" : mixColor(groups[a.group].color, groups[b.group].color);
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.max(1, Math.hypot(dx, dy));
+      const ux = dx / dist;
+      const uy = dy / dist;
+      const startX = a.x + ux * (a.size + 4);
+      const startY = a.y + uy * (a.size + 4);
+      const endX = b.x - ux * (b.size + 7);
+      const endY = b.y - uy * (b.size + 7);
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = highlighted ? 2.6 : 1.15;
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+
+      const arrowSize = highlighted ? 8 : 6;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - ux * arrowSize - uy * arrowSize * .55, endY - uy * arrowSize + ux * arrowSize * .55);
+      ctx.lineTo(endX - ux * arrowSize + uy * arrowSize * .55, endY - uy * arrowSize - ux * arrowSize * .55);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawNodes() {
+      const ordered = nodes.slice().sort((a, b) => nodeVisibility(a) - nodeVisibility(b));
+      for (const n of ordered) {
+        const visibility = nodeVisibility(n);
+        if (visibility <= .03) continue;
+        const group = groups[n.group];
+        const selected = n.id === selectedId;
+        const hovered = n.id === hoveredId;
+        const inPath = activePath && paths[activePath].nodes.includes(n.id);
+        const searched = searchTerm && n.label.toLowerCase().includes(searchTerm);
+        const r = n.size + (selected ? 7 : hovered ? 4 : inPath || searched ? 3 : 0);
+
+        ctx.save();
+        ctx.globalAlpha = visibility;
+        ctx.shadowColor = selected || hovered ? "rgba(23,32,51,.24)" : "rgba(23,32,51,.12)";
+        ctx.shadowBlur = selected || hovered ? 24 : 10;
+        ctx.fillStyle = group.color;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = selected ? 4 : n.core ? 2.8 : 1.8;
+        ctx.strokeStyle = selected ? "#111827" : "rgba(255,255,255,.92)";
+        ctx.stroke();
+
+        const compactView = activeMode !== "all" || activePath || activeGroup !== "all" || searchTerm;
+        if (selected || hovered || inPath || searched || n.core || compactView && visibility > .85 && scale > .58) {
+          const label = trimLabel(n.label, selected || hovered ? 26 : compactView ? 18 : 13);
+          ctx.font = `${selected ? 800 : 700} ${selected ? 15 : 12}px -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif`;
+          const metrics = ctx.measureText(label);
+          const bx = n.x + r + 7;
+          const by = n.y - 11;
+          ctx.fillStyle = "rgba(255,255,255,.88)";
+          roundRect(ctx, bx - 6, by - 1, metrics.width + 12, 23, 7);
+          ctx.fill();
+          ctx.fillStyle = selected ? "#111827" : "#334155";
+          ctx.fillText(label, bx, by + 15);
+        }
+
+        ctx.restore();
+      }
+    }
+
+    function nodeVisibility(n) {
+      const visible = getVisibleNodeSet();
+      if (!visible.has(n.id)) return 0;
+      let value = 1;
+      if (searchTerm && !n.label.toLowerCase().includes(searchTerm) && !groups[n.group].name.toLowerCase().includes(searchTerm)) value *= .54;
+      if (selectedId) {
+        const selectedLinks = linked.get(selectedId);
+        const close = selectedId === n.id
+          || selectedLinks.in.some((l) => l.source === n.id)
+          || selectedLinks.out.some((l) => l.target === n.id);
+        if (!close && activeMode === "all" && !activePath && activeGroup === "all" && !searchTerm) value *= .42;
+      }
+      return value;
+    }
+
+    function edgeVisibility(link) {
+      const visible = getVisibleNodeSet();
+      if (!visible.has(link.source) || !visible.has(link.target)) return 0;
+      let value = .52;
+      const a = nodeById.get(link.source);
+      const b = nodeById.get(link.target);
+      if (link.bridge) value = .34;
+      if (selectedId && (link.source === selectedId || link.target === selectedId)) value = .95;
+      if (activePath && !isPathEdge(link)) value *= .18;
+      if (searchTerm && !a.label.toLowerCase().includes(searchTerm) && !b.label.toLowerCase().includes(searchTerm)) value *= .25;
+      return value;
+    }
+
+    function isPathEdge(link) {
+      if (!activePath) return false;
+      const pathNodes = paths[activePath].nodes;
+      return pathNodes.includes(link.source) && pathNodes.includes(link.target);
+    }
+
+    function selectNode(id) {
+      selectedId = id;
+      const n = nodeById.get(id);
+      if (!n) return;
+      const group = groups[n.group];
+      const refs = linked.get(id);
+      const incoming = refs.in.map((link) => `${nodeById.get(link.source).label} - ${link.label}`);
+      const outgoing = refs.out.map((link) => `${link.label} - ${nodeById.get(link.target).label}`);
+
+      detailPanel.innerHTML = `
+        <div class="detail-head">
+          <div class="group-line"><span class="dot" style="background:${group.color}"></span>${escapeHTML(group.name)}</div>
+          <h2>${escapeHTML(n.label)}</h2>
+        </div>
+        <div class="detail-card">
+          <h3>这一步做什么</h3>
+          <p>${escapeHTML(n.summary || group.note)}</p>
+        </div>
+        <div class="detail-card">
+          <h3>上游来源</h3>
+          ${listHtml(incoming, "没有上游，属于入口节点。")}
+        </div>
+        <div class="detail-card">
+          <h3>下游去向</h3>
+          ${listHtml(outgoing, "没有下游，属于结果或保留节点。")}
+        </div>
+        <div class="detail-card">
+          <h3>落档口径</h3>
+          <p>${nodeArchiveNote(n)}</p>
+        </div>
+      `;
+    }
+
+    function nodeArchiveNote(n) {
+      if (n.group === "confirm" || n.id.includes("chairman") || n.id.includes("decision")) {
+        return "涉及董事长判断的内容，只记录“谁确认、确认结果、原因口径”，不替董事长或 Oscar 直接派活。";
+      }
+      if (n.group === "feishu") {
+        return "同步到飞书后，要能从文件、表格、日志三处追到来源和状态。";
+      }
+      if (n.group === "daily") {
+        return "本地处理只产出事实、索引、小结和待处理项；有冲突的内容必须进入确认链路。";
+      }
+      if (n.group === "package" || n.group === "feature") {
+        return "诊断结果要说明已确定、未核对、不能下结论和下一步，不把 Figma 说法直接当成可上线结论。";
+      }
+      return "该节点保留为流程中的可追溯点，用来说明材料从哪来、流到哪里、后续谁处理。";
+    }
+
+    function listHtml(items, fallback) {
+      if (!items.length) return `<p>${fallback}</p>`;
+      return `<ul>${items.slice(0, 8).map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ul>`;
+    }
+
+    function pointerPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function screenToWorld(point) {
+      return { x: (point.x - offsetX) / scale, y: (point.y - offsetY) / scale };
+    }
+
+    function hitTest(point) {
+      const w = screenToWorld(point);
+      let best = null;
+      let bestDist = Infinity;
+      for (const n of nodes) {
+        const d = Math.hypot(w.x - n.x, w.y - n.y);
+        if (d < n.size + 10 && d < bestDist && nodeVisibility(n) > .08) {
+          best = n;
+          bestDist = d;
+        }
+      }
+      return best;
+    }
+
+    canvas.addEventListener("pointermove", (event) => {
+      const point = pointerPosition(event);
+      const worldPoint = screenToWorld(point);
+      if (dragNode) {
+        if (dragOrigin && Math.hypot(point.x - dragOrigin.x, point.y - dragOrigin.y) > 3) {
+          dragNode.pinned = true;
+        }
+        dragNode.x = clamp(worldPoint.x, 26, world.width - 26);
+        dragNode.y = clamp(worldPoint.y, 26, world.height - 26);
+        dragNode.vx = 0;
+        dragNode.vy = 0;
+        return;
+      }
+      if (isPanning && lastPointer) {
+        offsetX += point.x - lastPointer.x;
+        offsetY += point.y - lastPointer.y;
+        lastPointer = point;
+        return;
+      }
+      const hit = hitTest(point);
+      hoveredId = hit ? hit.id : null;
+      canvas.style.cursor = hit ? "pointer" : "grab";
+    });
+
+    canvas.addEventListener("pointerdown", (event) => {
+      const point = pointerPosition(event);
+      const hit = hitTest(point);
+      if (hit) {
+        dragNode = hit;
+        selectNode(hit.id);
+      } else {
+        isPanning = true;
+      }
+      lastPointer = point;
+      dragOrigin = point;
+      canvas.setPointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("pointerup", (event) => {
+      dragNode = null;
+      isPanning = false;
+      lastPointer = null;
+      dragOrigin = null;
+      canvas.releasePointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("pointercancel", () => {
+      dragNode = null;
+      isPanning = false;
+      lastPointer = null;
+      dragOrigin = null;
+    });
+
+    canvas.addEventListener("dblclick", (event) => {
+      const hit = hitTest(pointerPosition(event));
+      if (hit) {
+        activeGroup = hit.group;
+        document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item.dataset.group === activeGroup));
+        graphBadge.textContent = `${groups[activeGroup].name}：${groups[activeGroup].note}`;
+      } else {
+        activeGroup = "all";
+        activePath = null;
+        document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item.dataset.group === "all"));
+        document.querySelectorAll(".path-button").forEach((item) => item.classList.remove("active"));
+        graphBadge.textContent = "当前显示全部节点。核心入口是“扫描新增材料”和“进入问诊”。";
+      }
+    });
+
+    canvas.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      const point = pointerPosition(event);
+      const before = screenToWorld(point);
+      const delta = event.deltaY > 0 ? .9 : 1.1;
+      scale = clamp(scale * delta, .36, 2.2);
+      offsetX = point.x - before.x * scale;
+      offsetY = point.y - before.y * scale;
+    }, { passive: false });
+
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value.trim().toLowerCase();
+      const found = nodes.find((n) => n.label.toLowerCase().includes(searchTerm));
+      if (found && searchTerm.length >= 2) selectNode(found.id);
+    });
+
+    window.addEventListener("resize", resize);
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function trimLabel(value, max) {
+      return value.length > max ? `${value.slice(0, max - 1)}…` : value;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function mixColor(a, b) {
+      return a === b ? a : "#8a94a6";
+    }
+
+    function roundRect(context, x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      context.beginPath();
+      context.moveTo(x + radius, y);
+      context.arcTo(x + w, y, x + w, y + h, radius);
+      context.arcTo(x + w, y + h, x, y + h, radius);
+      context.arcTo(x, y + h, x, y, radius);
+      context.arcTo(x, y, x + w, y, radius);
+      context.closePath();
+    }
+
+    setup();
+  </script>
+</body>
+</html>
