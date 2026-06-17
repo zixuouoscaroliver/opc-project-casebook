@@ -12,7 +12,7 @@ Validation date: 2026-06-17.
 | Pages home HTTP check | 200 |
 | H5 demo HTTP check | 200 |
 | Public file count | 39 |
-| Public content size | About 1.88MiB |
+| Public content size | About 1.89MiB |
 | Largest public file | Under 1MiB |
 | Files above 25MiB | 0 |
 | Public workbook row count | 33 |
