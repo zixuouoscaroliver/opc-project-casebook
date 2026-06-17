@@ -1,29 +1,29 @@
-# Publication Validation
+# 发布验证
 
-Validation date: 2026-06-17.
+验证日期：2026-06-17。
 
-## Checks Run
+## 已运行检查
 
-| Check | Result |
+| 检查项 | 结果 |
 |---|---|
-| Repository visibility | Public |
-| GitHub Pages source | `main` branch, `/docs` path |
-| GitHub Pages status | `built` |
-| Pages home HTTP check | 200 |
-| H5 demo HTTP check | 200 |
-| Public file count | 39 |
-| Public content size | About 1.89MiB |
-| Largest public file | Under 1MiB |
-| Files above 25MiB | 0 |
-| Public workbook row count | 33 |
-| Public workbook sheets | `概览`, `成就素材库`, `标签词典`, `OPC利益测算` |
-| Workbook formula error scan | 0 formula error matches |
-| Workbook local path scan | 0 hits |
-| HTML relative link check | 0 missing links |
-| Ignored build directory | `.build/` ignored |
+| 仓库可见性 | 公开 |
+| GitHub Pages 来源 | `main` 分支，`/docs` 路径 |
+| GitHub Pages 状态 | `built` |
+| Pages 首页 HTTP 检查 | 200 |
+| H5 Demo HTTP 检查 | 200 |
+| 公开文件数 | 39 |
+| 公开内容大小 | 约 1.89MiB |
+| 最大公开文件 | 小于 1MiB |
+| 超过 25MiB 的文件 | 0 |
+| 公开工作簿行数 | 34 |
+| 公开工作簿 sheet | `概览`, `成就素材库`, `标签词典`, `OPC利益测算` |
+| 工作簿公式错误扫描 | 0 个公式错误命中 |
+| 工作簿本地路径扫描 | 0 命中 |
+| HTML 相对链接检查 | 0 个缺失链接 |
+| 被忽略的构建目录 | `.build/` 已忽略 |
 
-## Notes
+## 备注
 
-- The first Pages check returned 404 while GitHub Pages was still building. The final check waited until Pages status became `built`.
-- The first workbook preview was readable but cramped. Column widths were fixed and previews were regenerated.
-- The first commit author metadata exposed a local machine identity. The commit was amended to a GitHub noreply identity before push.
+- 第一次 Pages 检查返回 404，因为 GitHub Pages 仍在构建。最终检查等到状态变为 `built`。
+- 第一版工作簿预览可读但列宽拥挤，后续已固定列宽并重新生成。
+- 第一次提交作者元数据暴露了本机身份，push 前已改成 GitHub noreply 身份。

@@ -1,54 +1,54 @@
-# Architecture
+# 架构说明
 
-This archive has two layers: a public reading layer and an evidence layer.
+这个公开仓库分成两层：公开阅读层和证据层。
 
-## Public Reading Layer
+## 公开阅读层
 
-| Area | Purpose |
+| 区域 | 用途 |
 |---|---|
-| `README.md` | Fast orientation for GitHub visitors |
-| `docs/index.html` | GitHub Pages landing page |
-| `docs/demos/` | Static H5 demos that can be opened in the browser |
-| `casebook/` | Human-readable project narrative and module map |
-| `resume-assets/` | Public resume-ready evidence library |
+| `README.md` | 给 GitHub 访问者快速理解项目 |
+| `docs/index.html` | GitHub Pages 展示页 |
+| `docs/demos/` | 可在浏览器打开的静态 H5 Demo |
+| `casebook/` | 面向人的项目叙事、项目地图和模块说明 |
+| `resume-assets/` | 可用于简历和面试的公开成就素材库 |
 
-## Evidence Layer
+## 证据层
 
-| Area | Purpose |
+| 区域 | 用途 |
 |---|---|
-| `evidence/` | Timestamped proof, metrics, validation, iteration history |
-| `evidence-index/` | Original public boundary and evidence index from the first archive pass |
-| `config/` | Publication policy and safety boundaries |
-| `src/` | Source-publication boundary and explanation of omitted private runtime source |
+| `evidence/` | 时间戳证明、指标快照、发布验证、迭代历史 |
+| `evidence-index/` | 第一版公开边界和脱敏证据索引 |
+| `config/` | 发布策略和安全边界 |
+| `src/` | 说明哪些源码/运行时材料不适合公开 |
 
-## Original OPC Evidence Sources
+## 原始 OPC 证据来源
 
-The public archive was built from three evidence groups:
+公开仓库来自三组证据：
 
-- OPC workspace outputs: product docs, H5 demos, screenshots, workbooks.
-- OPC inventory outputs: overview, project map, module list, GitHub/code context.
-- Resume asset workbook: structured achievement material generated from resume sources.
+- OPC 工作区成果：产品文档、H5 Demo、截图、工作簿。
+- OPC 盘点成果：项目总览、项目地图、功能模块清单、GitHub/代码关系。
+- 成就素材库工作簿：从简历素材中整理出来的结构化项目经历。
 
-The original project evidence window is 2026-03 to 2026-06. The GitHub archive was created on 2026-06-17.
+原始项目证据窗口是 2026-03 到 2026-06。这个 GitHub 公开归档创建于 2026-06-17。
 
-## Data Flow
+## 数据流
 
 ```text
-raw OPC workspace
-  -> inventory / project map / module list
-  -> sanitized casebook docs
-  -> public GitHub repository
+OPC 原始工作区
+  -> 项目盘点 / 项目地图 / 功能模块清单
+  -> 脱敏案例库文档
+  -> 公开 GitHub 仓库
 
-H5 outputs + screenshots
+H5 输出 + 截图
   -> docs/demos + docs/assets
   -> GitHub Pages
 
-resume workbook
-  -> public rows only
-  -> xlsx + markdown + csv
+成就素材库工作簿
+  -> 仅保留公开字段
+  -> xlsx + Markdown + CSV
   -> resume-assets
 ```
 
-## Publication Boundary
+## 公开边界
 
-The archive preserves enough evidence for review while intentionally excluding private raw material. That boundary is part of the engineering work: the project had to be credible without becoming a data dump.
+这个仓库保留足够的证据供外部查看，同时有意排除私有原始材料。这个边界本身就是工程工作的一部分：项目需要可信，但不能变成数据倾倒。

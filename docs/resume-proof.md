@@ -1,26 +1,26 @@
-# Resume Proof Narrative
+# 简历证明叙事
 
-## Short Version
+## 简短版本
 
-Built a public engineering evidence archive for an OPC product workstream, converting scattered Figma Make packages, H5 demos, workbook evidence, module maps, and project inventory outputs into a GitHub Pages casebook with sanitized proof, failure review, and resume-ready achievement assets.
+我把 OPC 产品项目中分散在 Figma Make 包、H5 Demo、Excel 工作簿、模块地图和项目盘点里的材料，整理成一个公开工程证据库。这个仓库通过 GitHub Pages、脱敏证据、失败复盘和成就素材库，证明项目经历真实存在、结构复杂，并且经过公开发布校验。
 
-## Resume Bullet Options
+## 简历 Bullet 可选
 
-- Organized a 2026 OPC product workstream into a public GitHub evidence archive, converting 20 project/asset groups, 14 functional domains, 6 H5 demos, and 33 resume asset rows into a reviewable casebook with GitHub Pages.
-- Rebuilt private project evidence into a public-safe portfolio repository by separating raw workspace data from sanitized casebook docs, timestamped proof, static demos, and a clean achievement workbook.
-- Documented failure modes across source discovery, privacy boundaries, workbook extraction, Pages deployment, and commit metadata hygiene, turning the archive into both a portfolio artifact and an engineering process record.
-- Translated OPC evidence retrieval, session inventory, product AI optimization, and Figma Make context governance into conservative time/cost impact estimates while explicitly excluding unverified revenue or customer-growth claims.
+- 将 2026 年 OPC 产品工作流整理为公开 GitHub 工程证据库，把 20 个项目/产物组、14 个业务域、6 个 H5 Demo 和 34 条成就素材沉淀为可浏览、可复核的案例库。
+- 将私有项目证据重构为公开安全的作品集仓库，区分原始工作区、脱敏案例库、时间戳证明、静态 Demo 和公开版成就工作簿。
+- 系统记录源材料发现、隐私边界、Excel 提取、Pages 部署、提交元数据清理等失败过程，把作品集同时做成一份工程过程记录。
+- 将 OPC 证据检索、session 盘点、商品 AI 优化、Figma Make 上下文治理转成保守的时间/成本测算，同时明确不声称未经验证的收入或客户增长。
 
-## Interview Talking Points
+## 面试讲法
 
-- The hard part was not uploading files. The hard part was deciding what should be public, what proves the work, and what must stay private.
-- I separated original engineering dates from the later archive date, so the repository does not pretend reconstructed docs were original artifacts.
-- I preserved failures because they show judgment: broad scans were narrowed, private evidence was not overclaimed, Excel source paths were removed, Pages was verified after build, and commit metadata was cleaned before publication.
+- 难点不是上传文件，而是判断什么能公开、什么能证明经历、什么必须留在私有边界内。
+- 我把原始工程时间和公开归档时间拆开，避免让重构后的文档假装成项目一开始就存在的原始文档。
+- 我保留失败复盘，因为它能体现判断力：宽扫被收敛，私有证据不过度声称，Excel 来源路径被移除，Pages 构建后才确认可访问，提交元数据也在公开前清理。
 
-## Evidence to Show
+## 可展示证据
 
-- GitHub Pages home: product-level overview and H5 demos.
-- `docs/failure-review.md`: iteration process and lessons.
-- `evidence/timestamped-proof.md`: what each timestamp proves.
-- `resume-assets/achievement-library-public.xlsx`: structured resume material.
-- `resume-assets/opc-business-impact.md`: public-safe impact estimate and claim boundary.
+- GitHub Pages 首页：项目级总览和 H5 Demo。
+- `docs/failure-review.md`：迭代过程、失败原因和经验。
+- `evidence/timestamped-proof.md`：每个时间戳能证明什么。
+- `resume-assets/achievement-library-public.xlsx`：结构化成就素材。
+- `resume-assets/opc-business-impact.md`：公开安全的收益测算和不可声称边界。

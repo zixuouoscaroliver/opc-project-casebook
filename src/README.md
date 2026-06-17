@@ -1,22 +1,22 @@
-# Source Boundary
+# 源码公开边界
 
-This public archive does not publish the private OPC runtime source tree or raw automation workspace.
+这个公开归档不发布私有 OPC 运行源码树，也不发布原始自动化工作区。
 
-What is preserved here:
+这里保留的内容：
 
-- Static H5 outputs under `docs/demos/`, which are the public, inspectable front-end artifacts.
-- Public archive build outputs under `casebook/`, `docs/`, `evidence/`, and `resume-assets/`.
-- Reconstructed engineering notes that explain how the original source, scripts, evidence library, and publication workflow behaved.
+- `docs/demos/` 下的静态 H5 输出，它们是可公开检查的前端产物。
+- `casebook/`、`docs/`、`evidence/`、`resume-assets/` 下的公开归档产物。
+- 重构后的工程说明，用于解释原始源码、脚本、证据库和发布流程大致如何工作。
 
-What is intentionally omitted:
+这里有意省略的内容：
 
-- Live automation scripts that contain private workspace assumptions.
-- Raw chat/session files, audio, model files, logs, and API result payloads.
-- Local absolute paths, credentials, private repository details, and internal database/table identifiers.
+- 含有私有工作区假设的实时自动化脚本。
+- 原始聊天/session 文件、音频、模型文件、日志和 API 结果。
+- 本地绝对路径、凭证、私有仓库细节、内部数据库/表字段标识。
 
-For reviewers, the important source-level evidence is not a runnable production app in this repository. It is the combination of:
+对评审者来说，这个仓库里最重要的源码级证据不是一个可运行的生产应用，而是以下材料的组合：
 
-- H5 source files in `docs/demos/`;
-- architecture and data-flow notes in `docs/`;
-- timestamped proof and metrics in `evidence/`;
-- public resume asset workbook and CSV in `resume-assets/`.
+- `docs/demos/` 中的 H5 源文件；
+- `docs/` 中的架构和数据流说明；
+- `evidence/` 中的时间戳证明和指标；
+- `resume-assets/` 中的公开成就工作簿和 CSV。

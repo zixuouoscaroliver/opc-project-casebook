@@ -1,36 +1,36 @@
-# Public Archive Configuration Boundary
+# 公开归档发布边界
 
-This file describes the publication shape rather than a live runtime config.
+这个文件描述的是公开仓库的发布形态，不是线上运行配置。
 
-## Repository Policy
+## 仓库策略
 
-- Visibility: public.
-- Branch: `main`.
-- GitHub Pages source: `/docs`.
-- Large file policy: no Git LFS for this version; all committed files should stay below 25MiB.
-- Evidence policy: publish summaries, static demos, screenshots, and public workbook extracts only.
+- 可见性：公开。
+- 分支：`main`。
+- GitHub Pages 来源：`/docs`。
+- 大文件策略：当前版本不使用 Git LFS；所有入库文件应低于 25MiB。
+- 证据策略：只发布摘要、静态 Demo、截图和公开版工作簿摘录。
 
-## Excluded Inputs
+## 排除输入
 
-- Raw OPC workspace snapshots.
-- Audio, video, local model files, logs, and temporary directories.
-- Original Feishu/API payloads and private table identifiers.
-- Raw Codex sessions or chat transcripts.
-- Private repository URLs and local absolute paths.
+- OPC 原始工作区快照。
+- 音频、视频、本地模型文件、日志和临时目录。
+- 原始 Feishu/API 返回和私有表字段标识。
+- 原始 Codex session 或聊天转录。
+- 私有仓库 URL 和本地绝对路径。
 
-## Included Outputs
+## 纳入输出
 
-- Reconstructed casebook documents.
-- Static H5 demos and screenshots.
-- Public evidence index and timestamped proof.
-- Public resume asset workbook, Markdown, and CSV.
+- 重构后的案例库文档。
+- 静态 H5 Demo 和截图。
+- 公开证据索引和时间戳证明。
+- 公开版成就素材库工作簿、Markdown 和 CSV。
 
-## Safety Check
+## 安全检查
 
-Before any public push, run the validation described in `docs/operations-runbook.md`:
+每次公开 push 前，按 `docs/operations-runbook.md` 中的流程验证：
 
-- file size check;
-- secret/path scan;
-- xlsx internal XML scan;
-- local link check;
-- GitHub visibility and Pages status check.
+- 文件体积检查；
+- 凭证/路径扫描；
+- xlsx 内部 XML 扫描；
+- 本地链接检查；
+- GitHub 可见性和 Pages 状态检查。

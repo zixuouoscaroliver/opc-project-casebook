@@ -1,63 +1,62 @@
-# Data Model
+# 数据模型
 
-This is a reconstructed public data model for the archive. It describes how evidence is represented after sanitization.
+这是公开归档的重构数据模型，用来说明脱敏后证据如何表达。
 
-## Casebook Document
+## 案例库文档
 
-| Field | Meaning |
+| 字段 | 含义 |
 |---|---|
-| title | Public document title |
-| source basis | Original evidence category used to reconstruct it |
-| public content | Sanitized explanation that can be published |
-| omitted content | Raw paths, sessions, logs, private identifiers, bulky files |
+| 标题 | 公开文档标题 |
+| 来源依据 | 用来重构该文档的原始证据类别 |
+| 公开内容 | 可以发布的脱敏说明 |
+| 省略内容 | 原始路径、session、日志、私有标识、大文件 |
 
-## Evidence Item
+## 证据项
 
-| Field | Meaning |
+| 字段 | 含义 |
 |---|---|
-| evidence_id | Public identifier such as `EVID-OPC-001` |
-| public_file | Repository file that carries the evidence |
-| proves | What the file proves |
-| public_handling | How the raw evidence was sanitized |
+| 证据编号 | 公开编号，例如 `EVID-OPC-001` |
+| 公开文件 | 承载证据的仓库文件 |
+| 证明内容 | 该文件能证明什么 |
+| 公开处理 | 原始证据如何脱敏、概括或改写 |
 
-## Resume Asset Row
+## 成就素材行
 
-The public workbook keeps only reusable portfolio fields:
+公开工作簿只保留可复用的作品集字段：
 
-- ID;
-- strength;
-- category;
-- project;
-- time;
-- role;
-- action;
-- reason;
-- method;
-- result;
-- metric;
-- ability tags;
-- target roles;
-- Chinese bullet;
-- English bullet;
-- credibility;
-- status.
+- ID；
+- 强度；
+- 类别；
+- 项目；
+- 时间；
+- 角色；
+- 做了什么；
+- 为什么重要；
+- 怎么做；
+- 结果；
+- 指标；
+- 能力标签；
+- 适合岗位；
+- 中文 bullet；
+- 可信度；
+- 状态。
 
-The public workbook removes:
+公开工作簿会移除：
 
-- original source file names;
-- local source paths;
-- private notes;
-- raw pending questions that are not suitable for publication.
+- 原始来源文件名；
+- 本地来源路径；
+- 私有备注；
+- 不适合公开的原始待补充问题。
 
-## Demo Item
+## Demo 项
 
-| Field | Meaning |
+| 字段 | 含义 |
 |---|---|
-| slug | Stable URL path under `docs/demos/` |
-| title | Public H5 title |
-| summary | What the demo proves |
-| screenshot | Optional static preview |
+| slug | `docs/demos/` 下的稳定 URL 路径 |
+| 标题 | 公开 H5 标题 |
+| 摘要 | 该 Demo 能证明什么 |
+| 截图 | 可选静态预览图 |
 
-## Metrics Snapshot
+## 指标快照
 
-`evidence/metrics-snapshot.json` records countable archive facts: file counts, H5 demo count, workbook row count, source evidence counts, validation status, and publication dates.
+`evidence/metrics-snapshot.json` 记录可量化的归档事实：文件数、H5 Demo 数、工作簿行数、来源证据数量、验证状态和发布日期。

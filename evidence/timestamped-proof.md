@@ -1,27 +1,27 @@
-# Timestamped Proof
+# 时间戳证明
 
-## Original Engineering Evidence
+## 原始工程证据
 
-| Date | Artifact | What it proves |
+| 日期 | 产物 | 能证明什么 |
 |---|---|---|
-| 2026-03 to 2026-06 | OPC project materials | The work covered product planning, Figma Make coordination, business module mapping, evidence automation, H5 demos, and resume asset extraction. |
-| 2026-06-16 | OPC inventory documents | The work had been consolidated into project maps, function modules, GitHub/code context, and completion audit before public publication. |
-| 2026-06-16 | Resume asset workbook | The achievement library existed before the public archive and was converted into 33 structured public resume materials in the current export. |
+| 2026-03 到 2026-06 | OPC 项目材料 | 工作覆盖产品规划、Figma Make 协同、业务模块映射、证据自动化、H5 Demo 和简历素材提取。 |
+| 2026-06-16 | OPC 盘点文档 | 在公开发布之前，项目已经被整理成项目地图、功能模块、GitHub/代码关系和完成度盘点。 |
+| 2026-06-16 | 成就素材库工作簿 | 成就素材库在公开归档前已经存在，并在当前公开导出中转换为 34 条结构化简历素材。 |
 
-## Public Archive Evidence
+## 公开归档证据
 
-| Date | Artifact | What it proves |
+| 日期 | 产物 | 能证明什么 |
 |---|---|---|
-| 2026-06-17 | Git commit `6cd7a1d` | First public archive commit created the casebook, demos, evidence index, and resume assets. |
-| 2026-06-17 | Git commit `0dfc562` | Expanded the public archive into an engineering evidence archive with PRD, architecture, data model, runbook, resume proof, and 13 failure-review items. |
-| 2026-06-17 | GitHub Pages status `built` | The public Pages site was deployed from `main` + `/docs`. |
-| 2026-06-17 | HTTP 200 checks | The Pages home and a demo page were publicly reachable after build. |
-| 2026-06-17 | Validation scans | No file over 25MiB, no publish-blocking sensitive text hits, and no local paths inside the public workbook XML. |
+| 2026-06-17 | Git commit `6cd7a1d` | 第一版公开归档创建了案例库、Demo、证据索引和成就素材。 |
+| 2026-06-17 | Git commit `0dfc562` | 公开归档扩展为工程证据库，补充 PRD、架构、数据模型、运行手册、简历证明和 13 条失败复盘。 |
+| 2026-06-17 | GitHub Pages 状态 `built` | 公开 Pages 站点从 `main` + `/docs` 部署成功。 |
+| 2026-06-17 | HTTP 200 检查 | Pages 首页和一个 Demo 页面在构建后可公开访问。 |
+| 2026-06-17 | 发布验证扫描 | 没有超过 25MiB 的文件，没有发布阻断级敏感文本命中，公开工作簿 XML 内没有本地路径。 |
 
-## What the Timestamps Do Not Prove
+## 时间戳不能证明什么
 
-- They do not prove this public repository existed during the original OPC project.
-- They do not prove the public archive is a production OPC backend.
-- They do not prove private raw workspaces should be public.
+- 不能证明这个公开仓库在原始 OPC 项目期间就存在。
+- 不能证明公开归档是 OPC 生产后端。
+- 不能证明私有原始工作区应该公开。
 
-They prove that the original evidence was later organized into a public, validated engineering archive.
+它们证明的是：原始证据后来被整理成了一个公开、已校验的工程证据库。

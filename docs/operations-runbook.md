@@ -1,43 +1,43 @@
-# Operations Runbook
+# 运行手册
 
-This is a public archive runbook, not a production service runbook.
+这是公开归档的运行手册，不是生产服务运行手册。
 
-## Local Checks Before Publishing
+## 发布前本地检查
 
-1. Confirm the repository has no unexpected tracked files.
-2. Check file sizes:
-   - no committed file above 25MiB;
-   - no audio/model/tmp/log directories.
-3. Scan text files for:
-   - local absolute paths;
-   - credential-shaped values;
-   - private field IDs;
-   - phone/email patterns.
-4. Inspect the public workbook:
-   - expected sheets exist;
-   - row count is 33;
-   - workbook XML has no local source paths.
-5. Check HTML links:
-   - every relative `href` and `src` in `docs/` resolves locally.
-6. Push to GitHub.
-7. Confirm:
-   - repository visibility is public;
-   - Pages source is `main` + `/docs`;
-   - Pages status is `built`;
-   - Pages home and at least one demo return HTTP 200.
+1. 确认仓库没有意外的 tracked 文件。
+2. 检查文件体积：
+   - 入库文件不能超过 25MiB；
+   - 不包含音频、模型、tmp、log 目录。
+3. 扫描文本文件：
+   - 本地绝对路径；
+   - 凭证形态字符串；
+   - 私有字段 ID；
+   - 手机号和邮箱形态。
+4. 检查公开工作簿：
+   - 预期 sheet 存在；
+   - 行数为 34；
+   - 工作簿 XML 内没有本地来源路径。
+5. 检查 HTML 链接：
+   - `docs/` 下所有相对 `href` 和 `src` 都能在本地解析。
+6. 推送到 GitHub。
+7. 确认：
+   - 仓库可见性为公开；
+   - Pages 来源为 `main` + `/docs`；
+   - Pages 状态为 `built`；
+   - Pages 首页和至少一个 Demo 返回 HTTP 200。
 
-## Publishing Notes
+## 发布注意事项
 
-- Do not add raw evidence directories.
-- Do not add the local `.build/` directory.
-- Do not use Git LFS for the current public version.
-- If a future version needs raw screenshots or large archives, publish them as a separate private archive or controlled release, not in the main public branch.
+- 不添加原始证据目录。
+- 不添加本地 `.build/` 目录。
+- 当前公开版不使用 Git LFS。
+- 如果未来要发布原始截图包或大归档，应放到单独的私有归档或受控 Release，不放进公开主分支。
 
-## Rollback
+## 回滚处理
 
-If sensitive material is found after publication:
+如果发布后发现敏感材料：
 
-1. Remove the file from the working tree.
-2. Commit the removal immediately.
-3. If the sensitive content is truly secret, rotate the secret and use GitHub history cleanup procedures before considering the repo safe.
-4. Re-run the scans and Pages checks.
+1. 先从工作区移除对应文件。
+2. 立刻提交删除。
+3. 如果内容是真正的 secret，先轮换 secret，再按 GitHub 历史清理流程处理，不能只删当前文件就认为安全。
+4. 重新跑敏感扫描和 Pages 检查。

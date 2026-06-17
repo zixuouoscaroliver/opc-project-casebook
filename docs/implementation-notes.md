@@ -1,59 +1,60 @@
-# Implementation Notes
+# 实现说明
 
-## Archive Implementation
+## 归档实现
 
-The public archive was created in a new repository instead of pushing the existing workspace. The existing workspace was about 3.7GB and included large private or irrelevant directories such as temporary files, transcripts, audio, and model files.
+公开归档没有直接推送原工作区，而是新建了一个干净仓库。原工作区约 3.7GB，里面包含临时文件、转录、音频、模型文件等私有或无关目录。
 
-The archive builder produced:
+归档生成了以下内容：
 
-- casebook Markdown files from inventory documents;
-- H5 demos and selected screenshots;
-- a GitHub Pages index;
-- a public evidence index;
-- a public resume asset workbook, Markdown table, and CSV.
+- 基于盘点文档生成的案例库 Markdown 文件；
+- H5 Demo 和精选截图；
+- GitHub Pages 首页；
+- 公开证据索引；
+- 公开版成就素材库，包括工作簿、Markdown 表格和 CSV。
 
-## Workbook Implementation
+## 工作簿实现
 
-The original resume asset workbook contained public material plus private source metadata. The public workbook was therefore regenerated instead of copied.
+原始成就素材库里既有公开材料，也有私有来源元数据。因此公开工作簿不是直接复制，而是重新生成。
 
-Public workbook rules:
+公开工作簿规则：
 
-- keep public resume/story fields;
-- drop source file list;
-- drop private local paths;
-- drop private pending notes;
-- export to `.xlsx`, `.md`, and `.csv`.
+- 保留可公开的简历/经历字段；
+- 删除来源文件清单；
+- 删除私有本地路径；
+- 删除不适合公开的待补充备注；
+- 导出为 `.xlsx`、`.md` 和 `.csv`。
 
-The public workbook contains 33 rows and four sheets:
+公开工作簿包含 34 行和 4 个 sheet：
 
-- `概览`;
-- `成就素材库`;
-- `标签词典`;
-- `OPC利益测算`.
+- `概览`；
+- `成就素材库`；
+- `标签词典`；
+- `OPC利益测算`。
 
-The final three rows convert OPC evidence into public-safe impact narratives:
+最后 4 行把 OPC 证据转成公开安全的影响叙事：
 
-- evidence retrieval and session inventory time saved;
-- Figma Make context-governance time released;
-- supplier product AI optimization and listing-speed savings.
+- 证据检索和 session 盘点节省时间；
+- Figma Make 上下文治理释放时间；
+- 供应商商品 AI 优化和上架速度提升。
+- 商业影响测算方法论和收入/客户边界。
 
-These rows are written as estimates and formulas, not as verified GMV or customer-growth claims.
+这些内容是测算和公式，不是已经验证的 GMV 或客户增长结论。
 
-## H5 Demo Implementation
+## H5 Demo 实现
 
-The archive includes six static demos:
+归档包含 6 个静态 Demo：
 
-- OPC daily tech sync;
-- OPC Skill workflow;
-- OPC graph/evidence logic;
-- OPC tenant relation graph;
-- four-package function map;
-- product design progress dashboard.
+- OPC 每日技术同步；
+- OPC Skill 工作流；
+- OPC 图谱/证据逻辑；
+- OPC 租户关系图；
+- 四包功能归属图；
+- 产品设计进度看板。
 
-These are static artifacts. They prove front-end/publication output, not a live backend.
+这些是静态产物，用来证明前端展示和发布能力，不代表公开仓库里有可运行后端。
 
-## GitHub Publication
+## GitHub 发布
 
-The repository was published as `zixuouoscaroliver/opc-project-casebook`, with GitHub Pages served from `/docs`.
+仓库发布为 `zixuouoscaroliver/opc-project-casebook`，GitHub Pages 从 `/docs` 目录提供页面。
 
-Before pushing, the commit author was amended to use a GitHub noreply address so that a local machine identity was not exposed in public commit metadata.
+push 前把提交作者改成 GitHub noreply 地址，避免公开提交元数据暴露本机身份。

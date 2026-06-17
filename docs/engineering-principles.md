@@ -1,26 +1,26 @@
-# Engineering Principles
+# 工程原则
 
-## 1. Proof over polish
+## 1. 证明优先于包装
 
-The repository should prove that the work existed and ran. A clean story is useful, but it must be backed by files, counts, timestamps, screenshots, and validation notes.
+仓库首先要证明工作真实存在、确实运行过。故事可以清楚，但必须有文件、数量、时间戳、截图和验证记录支撑。
 
-## 2. Public archive, not raw dump
+## 2. 做公开归档，不做原始倾倒
 
-The original OPC workspace is too large and too private to publish directly. The public repository is a curated evidence archive: enough to inspect, not enough to leak private material.
+原 OPC 工作区太大，也太私密，不能直接公开。公开仓库是精选证据库：足够外部检查，但不会泄露私有材料。
 
-## 3. Separate original dates from archive dates
+## 3. 区分原始时间和归档时间
 
-Original engineering evidence belongs to 2026-03 through 2026-06. The GitHub archive and public workbook were created on 2026-06-17. These dates should not be mixed.
+原始工程证据属于 2026-03 到 2026-06。GitHub 公开仓库和公开版工作簿创建于 2026-06-17。这两个时间不能混在一起讲。
 
-## 4. Keep failures visible
+## 4. 保留失败
 
-The important proof is not only the final repository. The failures show engineering judgment: broad scans were narrowed, private GitHub access was not overclaimed, workbook paths were removed, Pages build delay was verified instead of ignored.
+重要证据不只是最终仓库。失败过程能体现工程判断：宽扫被收敛，私有 GitHub 证据没有过度声称，工作簿路径被移除，Pages 构建延迟被等待和验证，而不是忽略。
 
-## 5. Make it useful to two readers
+## 5. 同时服务两类读者
 
-- Non-technical reader: should understand the project, role, artifacts, and outcome.
-- Technical reviewer: should see structure, constraints, validation, omitted data, and failure handling.
+- 非技术读者：能看懂项目、角色、产物和结果。
+- 技术评审：能看到结构、约束、验证、被省略的数据和失败处理。
 
-## 6. Do not claim production readiness without evidence
+## 6. 没有证据就不声称生产可用
 
-This repository proves project experience and archive quality. It does not claim the public archive is a deployable OPC production system.
+这个仓库证明项目经历和归档质量，不声称公开仓库本身就是可部署的 OPC 生产系统。

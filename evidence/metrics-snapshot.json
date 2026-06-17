@@ -6,13 +6,13 @@
   "github_repository": "https://github.com/zixuouoscaroliver/opc-project-casebook",
   "github_pages": "https://zixuouoscaroliver.github.io/opc-project-casebook/",
   "public_file_count": 39,
-  "public_content_bytes": 1978465,
+  "public_content_bytes": 1980377,
   "casebook_documents": 5,
   "engineering_docs": 8,
   "evidence_documents": 5,
   "h5_demo_count": 6,
   "screenshot_count": 4,
-  "resume_asset_rows": 33,
+  "resume_asset_rows": 34,
   "failure_review_items": 13,
   "source_inventory_counts": {
     "opc_project_groups": 20,
@@ -25,8 +25,8 @@
     "pages_status": "built",
     "pages_home_http": 200,
     "demo_http": 200,
-    "sensitive_text_scan": "no publish-blocking hits",
-    "xlsx_internal_path_scan": "0 hits",
-    "html_relative_link_check": "0 missing links"
+    "sensitive_text_scan": "无发布阻断命中",
+    "xlsx_internal_path_scan": "0 命中",
+    "html_relative_link_check": "0 个缺失链接"
   }
 }

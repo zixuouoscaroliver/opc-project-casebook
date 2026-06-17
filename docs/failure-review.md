@@ -1,41 +1,41 @@
-# Failure Review
+# 失败复盘
 
-This is the most important part of the archive. It records real iteration failures and what each one taught.
+这是这个公开仓库里最重要的一页。它记录的不是“包装得很顺”的项目，而是真实迭代里踩过的坑、失败原因，以及下一次应该怎么做。
 
-## Iteration Timeline
+## 迭代过程
 
-| Iteration | What happened | Failure reason | What changed | Lesson |
+| 迭代 | 发生了什么 | 失败原因 | 后来怎么改 | 经验 |
 |---|---|---|---|---|
-| 1. Broad source discovery | Early scans tried to search large workspace areas and historical folders. | The workspace included bulky temporary directories, transcript folders, and copied evidence trees. Broad scans created noise and delays. | Discovery was narrowed to known OPC roots, inventory outputs, selected H5 files, and the resume workbook. | Start from known evidence roots. Do not let file discovery become the project. |
-| 2. Full workspace upload idea | The first naive option was to publish the whole OPC working directory. | The workspace was about 3.7GB and contained private, bulky, or irrelevant data. | The archive became a curated public casebook instead of a raw mirror. | A proof repository should be inspectable, not exhaustive. |
-| 3. GitHub evidence gap | Earlier evidence review found that OPC did not exist as a clean prior GitHub repo. | Public GitHub repos were older and unrelated; private repo access was not reliable enough to claim full coverage. | A new public repository was created specifically for OPC proof. | Do not overclaim private GitHub evidence. If proof is local, publish a new clean archive. |
-| 4. Private raw evidence boundary | Some source tables and session-derived files contained raw paths, Feishu/API traces, and internal workflow details. | Raw evidence was useful internally but unsafe and noisy publicly. | The repo uses public casebook docs and evidence IDs instead of raw session tables. | Public evidence needs a translation layer. |
-| 5. Excel source metadata | The original workbook had a source-file sheet with local resume paths. | Copying the workbook directly would publish private file names and local paths. | A clean public workbook was regenerated from selected columns only. | Rebuild public artifacts from safe fields instead of editing private originals in place. |
-| 6. XLSX parsing mistake | An early workbook read failed because the worksheet path resolver duplicated the `xl/` prefix. | `.xlsx` internals store relationship targets in several path shapes. | The resolver was fixed to handle absolute, `xl/`, and relative targets. | Treat Office files as zipped packages with relationship metadata, not flat paths. |
-| 7. Markdown export bug | The first Markdown table generation used an invalid placeholder for a Chinese column containing `/`. | Python format placeholders do not safely handle arbitrary column names. | The exporter switched to explicit cell list assembly. | When exporting structured data, avoid clever string formatting around human column names. |
-| 8. Spreadsheet rendering mismatch | The artifact render result did not expose the expected `save` method. | The runtime returned a browser-style `Blob`. | The preview was saved with `arrayBuffer()`. | Verify actual runtime objects instead of assuming examples exactly match. |
-| 9. Workbook visual quality | The first public workbook rendered with cramped columns. | Values were correct, but the sheet was not pleasant to inspect. | Fixed column widths and re-rendered previews. | Evidence must be readable, not just technically present. |
-| 10. Search regex failure | The first sensitive scan used lookaround syntax unsupported by default ripgrep. | Default ripgrep regex engine does not support all PCRE constructs. | Re-ran the scan with PCRE2. | Tooling details matter in security checks. |
-| 11. GitHub Pages API quoting | The Pages API command failed because shell brackets were interpreted as patterns. | `source[branch]` and `source[path]` need quoting in zsh. | Quoted nested API fields and retried. | Shell quoting bugs are release bugs when they block publication. |
-| 12. Pages temporary 404 | After enabling Pages, the URL returned 404. | GitHub Pages was still building. | Polling continued until status became `built` and HTTP returned 200. | Do not treat deployment as done until the public URL works. |
-| 13. Commit author leak | The first local commit used an auto-generated local machine email. | Public commit metadata would expose a local hostname. | The commit was amended to a GitHub noreply identity before push. | Public archives need metadata hygiene, not only file hygiene. |
+| 1. 源材料宽扫 | 一开始试图扫描很大的工作区和历史文件夹。 | 工作区里混有临时目录、转录目录、复制出来的证据树，宽扫会制造大量噪音和等待时间。 | 收敛到已知 OPC 根目录、盘点成果、精选 H5 和成就素材库。 | 先从已知证据根目录出发，不要让“找文件”变成项目本身。 |
+| 2. 想直接上传全量工作区 | 最粗暴的方案是把整个 OPC 工作目录公开。 | 工作区约 3.7GB，里面有私有、大文件、临时和无关材料。 | 改成精选的公开案例库，而不是原始镜像。 | 证明型仓库要可检查，不是越全越好。 |
+| 3. GitHub 证据缺口 | 早期证据复核发现 OPC 不是一个干净的既有 GitHub 仓库。 | 公开 GitHub 仓库较旧且不直接相关；私有仓库权限也不足以支撑“全量证明”。 | 新建公开仓库，专门承载 OPC 经历证明。 | 不要过度声称私有 GitHub 证据；如果证据在本地，就发布一份干净的公开归档。 |
+| 4. 原始证据公开边界 | 一些源表和 session 派生文件里有原始路径、飞书/API 痕迹和内部流程细节。 | 原始证据对内部有用，但公开后既危险又难读。 | 仓库改用公开 casebook 文档和证据编号，不直接放原始 session 表。 | 公开证据需要一层“翻译”，不能直接倒原料。 |
+| 5. Excel 来源元数据 | 原始工作簿里有来源文件 sheet，包含本地简历路径。 | 直接复制工作簿会公开私人文件名和本地路径。 | 只抽取安全字段，重新生成公开版工作簿。 | 公开产物要从安全字段重建，不要在私有原件上修修补补。 |
+| 6. XLSX 解析错误 | 早期读取工作簿失败，因为 worksheet 路径解析重复拼了 `xl/` 前缀。 | `.xlsx` 内部关系文件的目标路径有绝对、`xl/` 和相对路径多种形态。 | 修正解析器，兼容不同关系路径。 | Office 文件本质是带关系元数据的压缩包，不能当成普通扁平文件。 |
+| 7. Markdown 导出 bug | 第一次导 Markdown 表格时，包含 `/` 的中文列名触发了无效占位符。 | Python 格式化占位符不适合直接吃任意人为列名。 | 改成显式拼装单元格列表。 | 结构化数据导出时，少耍字符串格式化小聪明。 |
+| 8. 表格预览运行时不一致 | 渲染结果没有预期中的 `save` 方法。 | 实际运行时返回的是浏览器风格的 `Blob`。 | 改用 `arrayBuffer()` 保存预览。 | 先验证真实运行对象，不要默认示例代码一定完全匹配。 |
+| 9. 工作簿可读性差 | 第一版公开工作簿列宽很挤。 | 数据是对的，但打开后不好读。 | 固定列宽并重新生成预览。 | 证据不只是“存在”，还要让人愿意看。 |
+| 10. 敏感扫描正则失败 | 第一次敏感扫描用了默认 `ripgrep` 不支持的 lookaround 语法。 | 默认正则引擎不支持完整 PCRE 语法。 | 改用 `--pcre2` 重新扫描。 | 安全检查里，工具细节就是发布细节。 |
+| 11. GitHub Pages API 引号问题 | Pages API 命令失败。 | zsh 会把 `source[branch]`、`source[path]` 里的方括号当成模式。 | 给嵌套 API 字段加引号后重试。 | shell 引号问题也会变成发布问题。 |
+| 12. Pages 临时 404 | 开启 Pages 后访问 URL 返回 404。 | GitHub Pages 还在构建。 | 持续轮询，直到状态变成 `built` 且 HTTP 返回 200。 | 公开 URL 真的能打开，才算部署完成。 |
+| 13. 提交作者信息泄露 | 第一次本地提交使用了自动生成的本机邮箱。 | 公开提交元数据会暴露本机 hostname。 | push 前把提交作者改成 GitHub noreply 身份。 | 公开归档不只要清文件内容，也要清元数据。 |
 
-## What These Failures Prove
+## 这些失败证明什么
 
-The project was not just file copying. It required engineering judgment in:
+这个项目不是简单复制文件，而是做了一组工程判断：
 
-- source scoping;
-- public/private boundary design;
-- evidence modeling;
-- spreadsheet extraction;
-- static site publication;
-- validation and release hygiene.
+- 源材料范围怎么收敛；
+- 公开和私有边界怎么切；
+- 证据如何建模；
+- Excel 和静态页面如何生成；
+- GitHub Pages 如何发布；
+- 发布前如何做脱敏、大小、链接和元数据校验。
 
-## Reusable Rules
+## 可复用规则
 
-1. Start from evidence roots, not the whole disk.
-2. Publish summaries and proof, not raw private workspaces.
-3. Rebuild public artifacts from safe fields.
-4. Check metadata, not only file content.
-5. Wait for public endpoints to actually work.
-6. Write down failures while they are still fresh.
+1. 从证据根目录开始，不要从整盘开始。
+2. 公开摘要和证明，不公开私有原始工作区。
+3. 公开产物从安全字段重建。
+4. 检查元数据，不只检查文件正文。
+5. 等公开页面真的能打开，再说发布完成。
+6. 失败要趁新鲜写下来，因为这正是项目能力的一部分。

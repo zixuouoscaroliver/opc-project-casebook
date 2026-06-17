@@ -1,48 +1,48 @@
-# Reconstructed PRD
+# 重构版 PRD
 
-This PRD was reconstructed after the fact from real engineering evidence. It should be read as an archive and portfolio specification, not as an original product document from the start of the OPC work.
+这份 PRD 是项目结束后基于真实工程证据重构出来的。它应该被理解为公开归档和作品集规格说明，而不是 OPC 工作一开始就存在的原始产品文档。
 
-## Problem
+## 问题
 
-The OPC project evidence existed across Figma Make packages, XMind files, H5 pages, Excel workbooks, Codex sessions, local automation outputs, and planning documents. That made the project hard to explain to external reviewers:
+OPC 项目证据分散在 Figma Make 包、XMind、H5 页面、Excel 工作簿、Codex session、本地自动化输出和规划文档里。外部人员很难快速理解：
 
-- the work was real, but the proof was scattered;
-- some evidence was private or too bulky for a public repository;
-- raw files contained local paths, private workspace details, and implementation noise;
-- a resume-ready story needed both product narrative and engineering evidence.
+- 工作真实存在，但证据分散；
+- 部分证据私密或体积过大，不适合公开仓库；
+- 原始文件包含本地路径、私有工作区细节和实现噪音；
+- 简历和作品集需要同时讲清产品价值和工程证据。
 
-## Goal
+## 目标
 
-Create a public GitHub evidence archive that proves the OPC project work without publishing the private raw workspace.
+创建一个公开 GitHub 工程证据库，在不公开私有原始工作区的前提下证明 OPC 项目经历。
 
-The archive must let a reader understand:
+读者应该能看懂：
 
-- what OPC work was done;
-- why the work was non-trivial;
-- which artifacts prove it;
-- which failures happened during extraction and publication;
-- how the public version was validated.
+- OPC 做了哪些工作；
+- 为什么这些工作不是简单整理；
+- 哪些产物可以证明它；
+- 提取和发布过程中踩过哪些坑；
+- 公开版经过了哪些校验。
 
-## Non-goals
+## 非目标
 
-- Do not publish the full private OPC workspace.
-- Do not claim the repository is a production-ready OPC system.
-- Do not publish raw chats, logs, audio, model files, live API payloads, or private identifiers.
-- Do not rewrite history as if all reconstructed documents existed during original implementation.
+- 不公开完整私有 OPC 工作区。
+- 不声称这个仓库是可生产运行的 OPC 系统。
+- 不公开原始聊天、日志、音频、模型文件、实时 API 返回或私有标识。
+- 不把后补的重构文档伪装成原始开发期间就存在的材料。
 
-## Public Deliverables
+## 公开交付物
 
-- `README.md`: recruiter/reviewer entrypoint.
-- `casebook/`: public project map and module explanation.
-- `docs/`: engineering explanation and GitHub Pages site.
-- `evidence/`: timestamped proof, metrics, and validation.
-- `resume-assets/`: public resume material in xlsx, Markdown, and CSV.
+- `README.md`：招聘方/评审方入口。
+- `casebook/`：公开项目地图和模块说明。
+- `docs/`：工程说明和 GitHub Pages 页面。
+- `evidence/`：时间戳证明、指标和发布验证。
+- `resume-assets/`：公开版简历素材，包含 xlsx、Markdown、CSV 和收益测算说明。
 
-## Acceptance Criteria
+## 验收标准
 
-- Repository is public and has GitHub Pages enabled.
-- Pages home and at least one H5 demo return HTTP 200.
-- No committed file exceeds 25MiB.
-- Sensitive path/credential scans show no publish-blocking hits.
-- Public xlsx has only public sheets and no local source paths in workbook XML.
-- Failure review documents known mistakes and what was learned.
+- 仓库是公开仓库，且已开启 GitHub Pages。
+- Pages 首页和至少一个 H5 Demo 返回 HTTP 200。
+- 入库文件没有超过 25MiB。
+- 敏感路径和凭证扫描没有发布阻断项。
+- 公开 xlsx 只包含公开 sheet，工作簿 XML 内没有本地来源路径。
+- 失败复盘写清已知错误和经验。
